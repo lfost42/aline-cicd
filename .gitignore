@@ -1,0 +1,16 @@
+**.DS_Store
+login.py
+venv/
+
+aline-account-microservice/
+aline-bank-microservice/
+aline-card-microservice/
+aline-transaction-microservice
+aline-underwriter-microservice/
+aline-user-microservice/
+
+aline-gateway/
+
+aline-admin-portal/
+aline-landing-portal/
+member-dashboard/
