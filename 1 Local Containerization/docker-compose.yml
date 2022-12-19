@@ -1,31 +1,39 @@
-version: "3.8"
+version: "3.11"
 
 x-variables: &variables
-  DB_USERNAME: user
-  DB_PASSWORD: really_good_password
-  DB_HOST: mysql
-  DB_PORT: 3306
-  DB_NAME: alinedb
+  DB_USERNAME: ${DB_USERNAME}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_HOST: ${DB_HOST}
+  DB_PORT: ${DB_PORT}
+  DB_NAME: ${DB_NAME}
   APP_SERVICE_HOST: host.docker.internal
-  ENCRYPT_SECRET_KEY: "001104a5cbe95ed3bff1495a1ae92a28"
-  JWT_SECRET_KEY: "my-32-character-ultra-secure-and-ultra-long-secret"
+  ENCRYPT_SECRET_KEY: ${ENCRYPT_SECRET_KEY}
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY}
 
 x-react-variables: &react-variables
-  REACT_APP_API: http://gateway:8080/api
+  REACT_APP_API: http://gateway:${GATEWAY_PORT}/api
 
 services:
   # Database
   mysql:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: really_good_password
-      MYSQL_PASSWORD: really_good_password
-      MYSQL_USER: user
-      MYSQL_DATABASE: alinedb
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-      - db-data:/var/lib/mysql
+      - ${DB_VOLUME}:/var/lib/mysql
     ports:
-      - 3306:3306
+      - ${DB_PORT}:${DB_PORT}
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   # Node Projects
   admin:
@@ -37,6 +45,14 @@ services:
     environment:
       <<: *react-variables
       PORT: ${ADMIN_PORT}
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   dashboard:
     build:
@@ -46,6 +62,14 @@ services:
       - ${DASHBOARD_PORT}:${DASHBOARD_PORT}
     environment:
       - PORT=${DASHBOARD_PORT}
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   landing:
     build:
@@ -56,6 +80,14 @@ services:
     environment:
       <<: *react-variables
       PORT: ${LANDING_PORT}
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   # Maven projects
   gateway:
@@ -69,6 +101,20 @@ services:
       APP_DIR: .
       APP_PORT: ${GATEWAY_PORT}
       TARGET: ./target
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   account:
     build:
@@ -83,6 +129,14 @@ services:
       APP_DIR: ./account-microservice
       APP_PORT: ${ACCOUNT_PORT}
       TARGET: ./aline-account-microservice/account-microservice/target
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   bank:
     build:
@@ -97,6 +151,14 @@ services:
       APP_DIR: ./bank-microservice
       APP_PORT: ${BANK_PORT}
       TARGET: /aline-bank-microservice/bank-microservice/target
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   card:
     build:
@@ -111,6 +173,14 @@ services:
       APP_DIR: ./card-microservice
       APP_PORT: ${CARD_PORT}
       TARGET: /aline-card-microservice/card-microservice/target
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   transaction:
     build:
@@ -125,6 +195,14 @@ services:
       APP_DIR: ./transaction-microservice
       APP_PORT: ${TRANSACTION_PORT}
       TARGET: /aline-transaction-microservice/transaction-microservice/target
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   underwriter:
     build:
@@ -139,6 +217,14 @@ services:
       APP_DIR: ./underwriter-microservice
       APP_PORT: ${UNDERWRITER_PORT}
       TARGET: /aline-underwriter-microservice/underwriter-microservice/target
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   user:
     build:
@@ -153,7 +239,14 @@ services:
       APP_DIR: ./user-microservice
       APP_PORT: ${USER_PORT}
       TARGET: /aline-user-microservice/user-microservice/target
-
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
 volumes:
   db-data:

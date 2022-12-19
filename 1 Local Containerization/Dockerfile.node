@@ -1,0 +1,15 @@
+# Specifies the base image to use for the Docker image.
+FROM node:14
+
+# Copies the filies in the current direcotry to tne /node_app directory in the Docker image.
+COPY . /node_app
+
+# Sets the working directory for any subsequent instructions in the Dockerfile.
+# Any instructions that follow will be executed relative to this directory.
+WORKDIR /node_app
+
+# Runs command in container to install dependencies listed in the `package.json` file.
+RUN npm install
+
+# Starts node application.
+CMD npm start

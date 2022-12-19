@@ -1,6 +1,8 @@
 **.DS_Store
 login.py
 venv/
+.env
+login.py
 
 aline-account-microservice/
 aline-bank-microservice/

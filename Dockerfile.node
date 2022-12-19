@@ -1,9 +1,0 @@
-FROM node:14
-
-COPY . /node_app
-
-WORKDIR /node_app
-
-RUN npm install
-
-CMD npm start
