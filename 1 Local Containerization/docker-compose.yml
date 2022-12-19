@@ -14,6 +14,7 @@ x-react-variables: &react-variables
   REACT_APP_API: http://gateway:${GATEWAY_PORT}/api
 
 services:
+  # Database
   mysql:
     image: mysql
     environment:
@@ -22,9 +23,21 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-      - ${DB_VOLUME}:/var/lib/mysql
+      - db-data:/var/lib/mysql
     ports:
       - ${DB_PORT}:${DB_PORT}
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   # Node Projects
   admin:
@@ -36,6 +49,18 @@ services:
     environment:
       <<: *react-variables
       PORT: ${ADMIN_PORT}
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   dashboard:
     build:
@@ -45,6 +70,18 @@ services:
       - ${DASHBOARD_PORT}:${DASHBOARD_PORT}
     environment:
       - PORT=${DASHBOARD_PORT}
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   landing:
     build:
@@ -55,8 +92,20 @@ services:
     environment:
       <<: *react-variables
       PORT: ${LANDING_PORT}
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
-  # Maven projects
+  # Maven Projects
   gateway:
     build:
       context: ./aline-gateway
@@ -68,6 +117,24 @@ services:
       APP_DIR: .
       APP_PORT: ${GATEWAY_PORT}
       TARGET: ./target
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   account:
     build:
@@ -82,6 +149,18 @@ services:
       APP_DIR: ./account-microservice
       APP_PORT: ${ACCOUNT_PORT}
       TARGET: ./aline-account-microservice/account-microservice/target
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   bank:
     build:
@@ -96,6 +175,18 @@ services:
       APP_DIR: ./bank-microservice
       APP_PORT: ${BANK_PORT}
       TARGET: /aline-bank-microservice/bank-microservice/target
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   card:
     build:
@@ -110,6 +201,9 @@ services:
       APP_DIR: ./card-microservice
       APP_PORT: ${CARD_PORT}
       TARGET: /aline-card-microservice/card-microservice/target
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
@@ -119,9 +213,6 @@ services:
           memory: 50M
       restart_policy:
         condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
 
   transaction:
     build:
@@ -136,6 +227,18 @@ services:
       APP_DIR: ./transaction-microservice
       APP_PORT: ${TRANSACTION_PORT}
       TARGET: /aline-transaction-microservice/transaction-microservice/target
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   underwriter:
     build:
@@ -150,6 +253,18 @@ services:
       APP_DIR: ./underwriter-microservice
       APP_PORT: ${UNDERWRITER_PORT}
       TARGET: /aline-underwriter-microservice/underwriter-microservice/target
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
 
   user:
     build:
@@ -164,6 +279,22 @@ services:
       APP_DIR: ./user-microservice
       APP_PORT: ${USER_PORT}
       TARGET: /aline-user-microservice/user-microservice/target
+    # command: sh -c 'set -o allexport; source /my-config; printenv'
+    # configs:
+    #   - my-config
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+
+# configs:
+#   my-config:
+#     external: true
 
 volumes:
   db-data:
