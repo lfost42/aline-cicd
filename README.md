@@ -20,16 +20,17 @@ Localized containerization is a way of packaging our web application, along with
 
 ### Build Docker Images and run Docker Compose
 
-1. Create an `Aline Financial` parent folder. 
-2. Clone all [Aline Financial](https://git1.smoothstack.com/instructors/leandro-yabut/aline-financial) repos into parent folder.
-3. Clone the develop branch in [Aline DevOps](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops/-/tree/develop) and move the following files into parent Aline Financial folder. 
+1. Create a .env file and add values to each global variable listed in the env file.
+2. Create an `Aline Financial` parent folder. 
+3. Clone all [Aline Financial](https://git1.smoothstack.com/instructors/leandro-yabut/aline-financial) repos into parent folder.
+4. Clone the develop branch in [Aline DevOps](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops/-/tree/develop) and move the following files into parent Aline Financial folder. 
 `Dockerfile.maven`
 `Dockerfile.node`
 `docker-compose.yml`
 `setup.py`
-4. run `setup.py`:
+5. run `setup.py`:
 - `py setup.py` or `python3 setup.py`
-5. run `docker-compose.yml`
+6. run `docker-compose.yml`
 - a. right-click `docker-compose.yml`
 - b. select `Compose Up` to run all services or select `Compose Up - Select Services` to build/run a subset of microservices.
 
@@ -41,18 +42,21 @@ lynda.foster@smoothstack.com<br>
 ## Roadmap
 
 [Aline DevOps repo](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops) - Check the devlop branch for completed features.
-- [ ] Docker CI/CD
+
+- [ ] Local Containerization and Automation
     - [x] Dockerize Images
     - [x] Docker Compose Local
+    - [x] Kubernetes Pod Local -- in progress
+    - [ ] Jenkins Pipelines
+    - [ ] Jenkins Integration with Sonarqube
+
+- [ ] Docker CI/CD
     - [ ] Docker Compose Cloud
 - [ ] Kubernetes CI/CD
-    - [x] Kubernetes Pod Local -- in progress
     - [ ] Kubernetes Cloud EKS
 - [ ] Terraform CI/CD
     - [ ] Create Base Infrastructure
 - [ ] Jenkins CI/CD
-    - [ ] Jenkins Pipelines
-    - [ ] Jenkins Integration with Sonarqube
     - [ ] Docker Compose Jenkins
     - [ ] Kubernetes via Jenkins
     - [ ] Terraform Plan and Apply via Jenkins
