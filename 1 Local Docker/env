@@ -1,6 +1,4 @@
 <!-- Create a .env file with the following variables: -->
-# database
-DB_PORT=
 
 # x-variables:
 DB_USERNAME=
