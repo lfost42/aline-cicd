@@ -25,6 +25,18 @@ services:
       - ${DB_VOLUME}:/var/lib/mysql
     ports:
       - ${DB_PORT}:${DB_PORT}
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   # Node Projects
   admin:
@@ -36,6 +48,18 @@ services:
     environment:
       <<: *react-variables
       PORT: ${ADMIN_PORT}
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   dashboard:
     build:
@@ -45,6 +69,20 @@ services:
       - ${DASHBOARD_PORT}:${DASHBOARD_PORT}
     environment:
       - PORT=${DASHBOARD_PORT}
+    deploy:
+      mode: replicated
+      replicas: 3
+      placement:
+        max_replicas_per_node: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   landing:
     build:
@@ -55,6 +93,18 @@ services:
     environment:
       <<: *react-variables
       PORT: ${LANDING_PORT}
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   # Maven projects
   gateway:
@@ -68,6 +118,24 @@ services:
       APP_DIR: .
       APP_PORT: ${GATEWAY_PORT}
       TARGET: ./target
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   account:
     build:
@@ -82,6 +150,18 @@ services:
       APP_DIR: ./account-microservice
       APP_PORT: ${ACCOUNT_PORT}
       TARGET: ./aline-account-microservice/account-microservice/target
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   bank:
     build:
@@ -96,6 +176,18 @@ services:
       APP_DIR: ./bank-microservice
       APP_PORT: ${BANK_PORT}
       TARGET: /aline-bank-microservice/bank-microservice/target
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   card:
     build:
@@ -136,6 +228,18 @@ services:
       APP_DIR: ./transaction-microservice
       APP_PORT: ${TRANSACTION_PORT}
       TARGET: /aline-transaction-microservice/transaction-microservice/target
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   underwriter:
     build:
@@ -150,6 +254,18 @@ services:
       APP_DIR: ./underwriter-microservice
       APP_PORT: ${UNDERWRITER_PORT}
       TARGET: /aline-underwriter-microservice/underwriter-microservice/target
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   user:
     build:
@@ -164,6 +280,18 @@ services:
       APP_DIR: ./user-microservice
       APP_PORT: ${USER_PORT}
       TARGET: /aline-user-microservice/user-microservice/target
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
 volumes:
   db-data:
