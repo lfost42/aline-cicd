@@ -18,22 +18,29 @@ Localized containerization is a way of packaging our web application, along with
 [VS Code](https://code.visualstudio.com)
 [Docker extension](https://code.visualstudio.com/docs/containers/overview)
 
-### Build Docker Images and run Docker Compose
-
+### Clone repo files:
 1. Create a .env file and add values to each global variable listed in the env file.
 2. Create an `Aline Financial` parent folder. 
 3. Clone all [Aline Financial](https://git1.smoothstack.com/instructors/leandro-yabut/aline-financial) repos into parent folder.
-4. Clone the develop branch in [Aline DevOps](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops/-/tree/develop) and move the following files from this repo's `1 Local Docker` folder to the parent Aline Financial folder. 
+4. Clone the develop branch in [Aline DevOps](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops/-/tree/develop)
+
+### Build Docker Images and run Docker Compose
+
+1. Follow the steops in `Clone repo files above` if you do not have `Aline Financial` repo files. 
+2. From the `docker` folder, move the following files to the parent `Aline Financial folder` you created in step 2. 
 `Dockerfile.maven`
 `Dockerfile.node`
 `docker-compose.yml`
 `setup.py`
 `.env` (the one you created in step 1)
-5. run `setup.py`:
+3. run `setup.py`:
 - `py setup.py` or `python3 setup.py`
-6. run `docker-compose.yml`
+4. run `docker-compose.yml`
 - a. right-click `docker-compose.yml`
 - b. select `Compose Up` to run all services or select `Compose Up - Select Services` to build/run a subset of microservices.
+
+### Kubernetes Local
+1. Follow the steps in `Clone repo files above` if you do not have `Aline Financial` repo files. 
 
 ## Support
 
@@ -45,9 +52,9 @@ lynda.foster@smoothstack.com<br>
 [Aline DevOps repo](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops) - Check the devlop branch for completed features.
 
 - [ ] Local Containerization and Automation
-    - [x] Dockerize Images
-    - [x] Docker Compose Local
-    - [x] Kubernetes Pod Local -- in progress
+    - [ ] Dockerize Images
+    - [ ] Docker Compose Local
+    - [ ] Kubernetes Pod Local
     - [ ] Jenkins Pipelines
     - [ ] Jenkins Integration with Sonarqube
 
@@ -81,4 +88,4 @@ With support from the Cyber Cumulus Team:
 [MIT License](LICENSE.md)
 
 ## Project status
-Currently working on Local Containerization/Automation.
+See main README in parent folder.

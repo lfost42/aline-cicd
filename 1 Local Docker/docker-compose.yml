@@ -14,6 +14,7 @@ x-react-variables: &react-variables
   REACT_APP_API: http://gateway:${GATEWAY_PORT}/api
 
 services:
+
   # Database
   mysql:
     image: mysql
@@ -24,20 +25,27 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - db-data:/var/lib/mysql
+    networks:
+      - backend
     ports:
       - ${DB_PORT}:${DB_PORT}
     # command: sh -c 'set -o allexport; source /my-config; printenv'
     # configs:
     #   - my-config
     deploy:
+      placement:
+        constraints: [node.role == manager]
       mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      replicas: 2
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   # Node Projects
   admin:
@@ -46,21 +54,23 @@ services:
       dockerfile: ../Dockerfile.node
     ports:
       - ${ADMIN_PORT}:${ADMIN_PORT}
+    networks:
+      - frontend
     environment:
       <<: *react-variables
       PORT: ${ADMIN_PORT}
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   dashboard:
     build:
@@ -70,18 +80,20 @@ services:
       - ${DASHBOARD_PORT}:${DASHBOARD_PORT}
     environment:
       - PORT=${DASHBOARD_PORT}
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
+    networks:
+      - frontend
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   landing:
     build:
@@ -92,18 +104,20 @@ services:
     environment:
       <<: *react-variables
       PORT: ${LANDING_PORT}
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
+    networks:
+      - frontend
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   # Maven Projects
   gateway:
@@ -112,23 +126,27 @@ services:
       dockerfile: ../Dockerfile.maven
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
+    networks:
+      - default
     environment:
       <<: *variables
       APP_DIR: .
       APP_PORT: ${GATEWAY_PORT}
       TARGET: ./target
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
+      placement:
+        constraints: [node.role == manager]
       mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      replicas: 2
+      update_config:
+        parallelism: 2
+        delay: 5s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
       interval: 30s
@@ -144,23 +162,25 @@ services:
       - mysql
     ports:
       - ${ACCOUNT_PORT}:${ACCOUNT_PORT}
+    networks:
+      - backend
     environment:
       <<: *variables
       APP_DIR: ./account-microservice
       APP_PORT: ${ACCOUNT_PORT}
       TARGET: ./aline-account-microservice/account-microservice/target
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   bank:
     build:
@@ -170,23 +190,25 @@ services:
       - mysql
     ports:
       - ${BANK_PORT}:${BANK_PORT}
+    networks:
+      - backend
     environment:
       <<: *variables
       APP_DIR: ./bank-microservice
       APP_PORT: ${BANK_PORT}
       TARGET: /aline-bank-microservice/bank-microservice/target
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   card:
     build:
@@ -196,23 +218,25 @@ services:
       - mysql
     ports:
       - ${CARD_PORT}:${CARD_PORT}
+    networks:
+      - backend
     environment:
       <<: *variables
       APP_DIR: ./card-microservice
       APP_PORT: ${CARD_PORT}
       TARGET: /aline-card-microservice/card-microservice/target
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   transaction:
     build:
@@ -222,23 +246,25 @@ services:
       - mysql
     ports:
       - ${TRANSACTION_PORT}:${TRANSACTION_PORT}
+    networks:
+      - backend
     environment:
       <<: *variables
       APP_DIR: ./transaction-microservice
       APP_PORT: ${TRANSACTION_PORT}
       TARGET: /aline-transaction-microservice/transaction-microservice/target
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   underwriter:
     build:
@@ -248,23 +274,25 @@ services:
       - mysql
     ports:
       - ${UNDERWRITER_PORT}:${UNDERWRITER_PORT}
+    networks:
+      - backend
     environment:
       <<: *variables
       APP_DIR: ./underwriter-microservice
       APP_PORT: ${UNDERWRITER_PORT}
       TARGET: /aline-underwriter-microservice/underwriter-microservice/target
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
   user:
     build:
@@ -274,23 +302,25 @@ services:
       - mysql
     ports:
       - ${USER_PORT}:${USER_PORT}
+    networks:
+      - backend
     environment:
       <<: *variables
       APP_DIR: ./user-microservice
       APP_PORT: ${USER_PORT}
       TARGET: /aline-user-microservice/user-microservice/target
-    # command: sh -c 'set -o allexport; source /my-config; printenv'
-    # configs:
-    #   - my-config
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 50M
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
+      resources:
+        limits:
+          cpus: '0.09'
+          memory: 50M
 
 # configs:
 #   my-config:
