@@ -26,8 +26,8 @@ services:
       - db-data:/var/lib/mysql
     ports:
       - ${DB_PORT}:${DB_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
 
   # Node Projects
   admin:
@@ -36,8 +36,8 @@ services:
       dockerfile: ../Dockerfile.node
     ports:
       - ${ADMIN_PORT}:${ADMIN_PORT}
-    networks:
-      - frontend
+    # networks:
+    #   - frontend
     environment:
       <<: *react-variables
       PORT: ${ADMIN_PORT}
@@ -48,8 +48,8 @@ services:
       dockerfile: ../Dockerfile.node
     ports:
       - ${DASHBOARD_PORT}:${DASHBOARD_PORT}
-    networks:
-      - frontend
+    # networks:
+    #   - frontend
     environment:
       - PORT=${DASHBOARD_PORT}
 
@@ -59,8 +59,8 @@ services:
       dockerfile: ../Dockerfile.node
     ports:
       - ${LANDING_PORT}:${LANDING_PORT}
-    networks:
-      - frontend
+    # networks:
+    #   # - frontend
     environment:
       <<: *react-variables
       PORT: ${LANDING_PORT}
@@ -72,8 +72,8 @@ services:
       dockerfile: ../Dockerfile.maven
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       <<: *variables
       APP_DIR: .
@@ -94,8 +94,8 @@ services:
       - mysql
     ports:
       - ${ACCOUNT_PORT}:${ACCOUNT_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       <<: *variables
       APP_DIR: ./account-microservice
@@ -110,8 +110,8 @@ services:
       - mysql
     ports:
       - ${BANK_PORT}:${BANK_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       <<: *variables
       APP_DIR: ./bank-microservice
@@ -126,8 +126,8 @@ services:
       - mysql
     ports:
       - ${CARD_PORT}:${CARD_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       <<: *variables
       APP_DIR: ./card-microservice
@@ -142,8 +142,8 @@ services:
       - mysql
     ports:
       - ${TRANSACTION_PORT}:${TRANSACTION_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       <<: *variables
       APP_DIR: ./transaction-microservice
@@ -158,8 +158,8 @@ services:
       - mysql
     ports:
       - ${UNDERWRITER_PORT}:${UNDERWRITER_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       <<: *variables
       APP_DIR: ./underwriter-microservice
@@ -174,8 +174,8 @@ services:
       - mysql
     ports:
       - ${USER_PORT}:${USER_PORT}
-    networks:
-      - backend
+    # networks:
+    #   - backend
     environment:
       <<: *variables
       APP_DIR: ./user-microservice
@@ -185,13 +185,16 @@ services:
 volumes:
   db-data:
 
-networks:
-  default:
-    name: aline_default
-    driver: overlay
-  frontend:
-    name: aline_frontend
-    driver: overlay
-  backend:
-    name: aline_backend
-    driver: overlay
+# networks:
+#   default:
+#     name: aline_default
+#     driver: overlay
+#     attachable: true
+#   frontend:
+#     name: aline_frontend
+#     driver: overlay
+#     attachable: true
+#   backend:
+#     name: aline_backend
+#     driver: overlay
+#     attachable: true
