@@ -1,12 +1,13 @@
 <!-- Create a .env file with the following variables: -->
+# database
+DB_PORT=
 
 # x-variables:
 DB_USERNAME=
 DB_PASSWORD=
 DB_HOST=
-DB_NAME=
-ENCRYPT_SECRET_KEY=
-JWT_SECRET_KEY=
+ENCRYPT_SECRET_KEY=""
+JWT_SECRET_KEY=""
 
 # Database
 MYSQL_ROOT_PASSWORD=
@@ -28,7 +29,3 @@ USER_PORT=
 ADMIN_PORT=
 DASHBOARD_PORT=
 LANDING_PORT=
-
-# database
-DB_PORT=
-DB_DATA=

@@ -1,6 +1,7 @@
 # Specifies the base image to use for the Docker image.
 FROM node:14
 
+# Specifies name and version
 LABEL Name="Dockerfile.node" version="1.1"
 
 # Copies the filies in the current direcotry to tne /node_app directory in the Docker image.
