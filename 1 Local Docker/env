@@ -1,6 +1,8 @@
 <!-- Create a .env file with the following variables: -->
 # database
 DB_PORT=
+DB_NAME=
+APP_SERVICE_HOST=
 
 # x-variables:
 DB_USERNAME=

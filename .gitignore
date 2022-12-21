@@ -1,10 +1,6 @@
 **.DS_Store
 login.py
 venv/
-.env
-**.env
-login.py
-**login.py
 **aline-kconfig.yaml
 config.yaml
 **config.yaml
