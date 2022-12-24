@@ -12,7 +12,7 @@ COPY . /node_app
 WORKDIR /node_app
 
 # All ports the microservices built with this dockerfile may listen to
-EXPOSE 3000 3007 4200
+EXPOSE 3007
 
 # Runs command in container to install dependencies listed in the `package.json` file.
 RUN npm install

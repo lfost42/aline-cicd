@@ -42,16 +42,16 @@ services:
       <<: *react-variables
       PORT: ${ADMIN_PORT}
 
-  dashboard:
+  member:
     build:
       context: ./member-dashboard
       dockerfile: ../Dockerfile.node
     ports:
-      - ${DASHBOARD_PORT}:${DASHBOARD_PORT}
+      - ${MEMBER_PORT}:${MEMBER_PORT}
     # networks:
     #   - frontend
     environment:
-      - PORT=${DASHBOARD_PORT}
+      - PORT=${MEMBER_PORT}
 
   landing:
     build:
