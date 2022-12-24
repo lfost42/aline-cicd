@@ -5,8 +5,8 @@ x-variables: &variables
   DB_PASSWORD: ${DB_PASSWORD}
   DB_HOST: ${DB_HOST}
   DB_PORT: ${DB_PORT}
-  DB_NAME: alinedb
-  APP_SERVICE_HOST: host.docker.internal
+  DB_NAME: ${DB_NAME}
+  APP_SERVICE_HOST: ${APP_SERVICE_HOST}
   ENCRYPT_SECRET_KEY: ${ENCRYPT_SECRET_KEY}
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
 
@@ -21,7 +21,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
-      MYSQL_DATABASE: alinedb
+      MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - db-data:/var/lib/mysql
     ports:
@@ -41,7 +41,7 @@ services:
     environment:
       - PORT=${MEMBER_PORT}
 
-  # React
+  # React Projects
   admin:
     build:
       context: ./aline-admin-portal
