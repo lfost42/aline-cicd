@@ -29,11 +29,23 @@ services:
     # networks:
     #   - backend
 
-  # Node Projects
+  # Angular
+  member:
+    build:
+      context: ./member-dashboard
+      dockerfile: ../Dockerfile.angular
+    ports:
+      - ${MEMBER_PORT}:${MEMBER_PORT}
+    # networks:
+    #   - frontend
+    environment:
+      - PORT=${MEMBER_PORT}
+
+  # React
   admin:
     build:
       context: ./aline-admin-portal
-      dockerfile: ../Dockerfile.node
+      dockerfile: ../Dockerfile.react
     ports:
       - ${ADMIN_PORT}:${ADMIN_PORT}
     # networks:
@@ -42,21 +54,10 @@ services:
       <<: *react-variables
       PORT: ${ADMIN_PORT}
 
-  member:
-    build:
-      context: ./member-dashboard
-      dockerfile: ../Dockerfile.node
-    ports:
-      - ${MEMBER_PORT}:${MEMBER_PORT}
-    # networks:
-    #   - frontend
-    environment:
-      - PORT=${MEMBER_PORT}
-
   landing:
     build:
       context: ./aline-landing-portal
-      dockerfile: ../Dockerfile.node
+      dockerfile: ../Dockerfile.react
     ports:
       - ${LANDING_PORT}:${LANDING_PORT}
     # networks:
