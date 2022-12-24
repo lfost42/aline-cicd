@@ -29,7 +29,7 @@ services:
     # networks:
     #   - backend
 
-  # Angular
+  # # Frontend Projects
   member:
     build:
       context: ./member-dashboard
@@ -41,11 +41,10 @@ services:
     environment:
       - PORT=${MEMBER_PORT}
 
-  # React Projects
   admin:
     build:
       context: ./aline-admin-portal
-      dockerfile: ../Dockerfile.react
+      dockerfile: ../Dockerfile.node
     ports:
       - ${ADMIN_PORT}:${ADMIN_PORT}
     # networks:
