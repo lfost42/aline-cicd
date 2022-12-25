@@ -33,7 +33,7 @@ services:
   member:
     build:
       context: ./member-dashboard
-      dockerfile: ../Dockerfile.angular
+      dockerfile: ../Dockerfile.node
     ports:
       - ${MEMBER_PORT}:${MEMBER_PORT}
     # networks:
@@ -56,7 +56,7 @@ services:
   landing:
     build:
       context: ./aline-landing-portal
-      dockerfile: ../Dockerfile.react
+      dockerfile: ../Dockerfile.node
     ports:
       - ${LANDING_PORT}:${LANDING_PORT}
     # networks:

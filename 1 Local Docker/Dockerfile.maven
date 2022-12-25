@@ -12,7 +12,7 @@ ARG APP_DIR
 # Copies the contents of the `${TARGET}` directory which is the build output
 # directory of the Maven project to the `/maven_app` directory in the Docker 
 # image.
-COPY ${TARGET} /maven_app
+COPY ["${TARGET}", "/maven_app"]
 
 # Sets the working directory for subsequent instructions in the Dockerfile.
 WORKDIR /maven_app
@@ -23,4 +23,4 @@ EXPOSE 8070 8071 8072 8073 8080 8083 8084
 # Specifies the command that should be run when the container is started.
 # Starts the Java application by running the `#.jar` file in the `target`
 # directory of the ${APP_DIR} directory.
-CMD java -jar ${APP_DIR}/target/*.jar
+CMD ["java", "-jar", "${APP_DIR}/target/*.jar"]

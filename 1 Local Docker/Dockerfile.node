@@ -1,0 +1,46 @@
+# Specifies the base image to use for the Docker image.
+FROM node:16-alpine as build
+
+# Specifies name and version
+LABEL Name="Dockerfile.react" version="1.1"
+
+# Assigns value for SERVER_HOME to the server folder
+ENV SERVER_HOME=/usr/src/server/
+ENV NODE_ENV=development
+
+# Sets the working directory for any subsequent instructions in the Dockerfile.
+# Any instructions that follow will be executed relative to this directory.
+WORKDIR $SERVER_HOME
+
+# Copies package.json to $SERVER_HOME. Exec form avoids docker from implicitly invoking a shell.
+COPY ["./package*.json", "$SERVER_HOME"]
+
+# Installs the npm package manager globally.
+RUN ["npm", "install", "-g", "npm@7.24.0"]
+# Installs pytthon3.
+RUN ["apk", "add", "--update", "python3", "make", "g++", "&&", "rm", "-rf", "/var/cache/apk/*"]
+# Reads the package.json file in the current directory and installs all the packages listed under the dependencies field.
+RUN ["npm", "install", "--legacy-peer-deps"]
+
+# Copies remaining files in the current directory to $SERVER_HOME in the Docker image.
+COPY [".", "$SERVER_HOME"]
+
+# Runs command in container to install dependencies listed in the `package.json` file.
+RUN ["npm", "run", "build"]
+# Removes obsolete files
+RUN ["/bin/bash", "-c", "find . ! -name dist ! -name node_modules -maxdepth 1 -mindepth 1 -exec rm -rf {} \\;"]
+
+# New base image
+FROM node:16-alpine
+WORKDIR /root/
+
+# Copies image minus obsolete files
+COPY --from=build $SERVER_HOME ./
+
+ENTRYPOINT ["node", "/root/node_modules/.bin/http-server" , "./dist/"]
+
+# All ports the microservices built with this dockerfile may listen to
+EXPOSE 3000 3007 4200
+
+# # Starts node application.
+# CMD ["npm","start"]
