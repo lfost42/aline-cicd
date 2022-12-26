@@ -78,7 +78,7 @@ services:
       <<: *variables
       APP_DIR: .
       APP_PORT: ${GATEWAY_PORT}
-      TARGET: ./target
+      TARGET: ./aline-gateway/target
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
       interval: 30s

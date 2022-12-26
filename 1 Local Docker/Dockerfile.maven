@@ -1,26 +1,38 @@
-# Specifies maven 3 on top of AdoptOpenJDK 11 as the base image to use 
-# for the Docker image.
-FROM maven:3-adoptopenjdk-11
-
-# Specifies name and version
-LABEL Name="Dockerfile.maven" version="1.1"
+# Specifies maven 3.6.3 on top of JDK 11 slim as the base image.
+FROM maven:3.6.3-jdk-11-slim as build
 
 # Defines a build argument which can be used to specify the directory 
 # containing the Java application.
 ARG APP_DIR
 
-# Copies the contents of the `${TARGET}` directory which is the build output
-# directory of the Maven project to the `/maven_app` directory in the Docker 
-# image.
-COPY ["${TARGET}", "/maven_app"]
+# Copies project files to the `/maven_app` directory in the Docker image.
+COPY . /maven_app
 
 # Sets the working directory for subsequent instructions in the Dockerfile.
 WORKDIR /maven_app
 
+# Compiles maven package
+RUN mvn package -DskipTests=true
+
 # All ports the microservices built with this dockerfile may listen to
 EXPOSE 8070 8071 8072 8073 8080 8083 8084
 
-# Specifies the command that should be run when the container is started.
-# Starts the Java application by running the `#.jar` file in the `target`
-# directory of the ${APP_DIR} directory.
-CMD ["java", "-jar", "${APP_DIR}/target/*.jar"]
+# Runs maven app (first stage)
+CMD java -jar ${APP_DIR}/target/*.jar
+
+# # Second stage build
+# FROM maven:3.6.3-jdk-11-slim
+
+# # Specifies name and version
+# LABEL Name="Dockerfile.maven" version="1.1"
+
+# # Copies the contents of the `${TARGET}` directory which is the build output
+# # directory of the Maven project to the `/maven_app` directory in the Docker 
+# # image.
+# COPY --from=build ${TARGET} /maven_app
+
+# # All ports the microservices built with this dockerfile may listen to
+# EXPOSE 8070 8071 8072 8073 8080 8083 8084
+
+# # Starts the Java application by running the `*.jar` file in the `target` directory.
+# CMD java -jar ${APP_DIR}/target/*.jar
