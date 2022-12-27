@@ -14,6 +14,8 @@ WORKDIR /maven_app
 # Compiles maven package
 RUN mvn package -DskipTests=true
 
+COPY ${TARGET} /target/
+
 # All ports the microservices built with this dockerfile may listen to
 EXPOSE 8070 8071 8072 8073 8080 8083 8084
 
@@ -29,10 +31,12 @@ CMD java -jar ${APP_DIR}/target/*.jar
 # # Copies the contents of the `${TARGET}` directory which is the build output
 # # directory of the Maven project to the `/maven_app` directory in the Docker 
 # # image.
-# COPY --from=build ${TARGET} /maven_app
+# COPY --from=build /target /maven_target
+
+# WORKDIR /maven_target
 
 # # All ports the microservices built with this dockerfile may listen to
 # EXPOSE 8070 8071 8072 8073 8080 8083 8084
 
 # # Starts the Java application by running the `*.jar` file in the `target` directory.
-# CMD java -jar ${APP_DIR}/target/*.jar
+# CMD java -jar maven_target/*.jar
