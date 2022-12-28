@@ -40,7 +40,8 @@ Localized containerization is a way of packaging our web application, along with
 - b. select `Compose Up` to run all services or select `Compose Up - Select Services` to build/run a subset of microservices.
 
 ### Kubernetes Local
-1. Follow the steps in `Clone repo files above` if you do not have `Aline Financial` repo files. 
+1. Pull docker hub images for lyndasm/aline:
+`docker pull lyndasm/aline --all-tags`
 
 ## Support
 
