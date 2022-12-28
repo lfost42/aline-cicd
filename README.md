@@ -52,10 +52,10 @@ lynda.foster@smoothstack.com<br>
 
 [Aline DevOps repo](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops) - Check the devlop branch for completed features.
 
-- [ ] Local Containerization and Automation
-    - [ ] Dockerize Images
-    - [ ] Docker Compose Local
-    - [ ] Kubernetes Pod Local
+- [x] Local Containerization and Automation
+    - [x] Dockerize Images
+    - [x] Docker Compose Local
+    - [x] Kubernetes Pod Local -- in progress
     - [ ] Jenkins Pipelines
     - [ ] Jenkins Integration with Sonarqube
 

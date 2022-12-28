@@ -18,9 +18,6 @@ for microservice in microservices:
     os.system("git submodule deinit -f .")
     os.system("git submodule update --init --remote --merge")
 
-    # Compile mvn packages for each microservice
-    os.system("mvn package -DskipTests=true")
-
     # Move back into parent directory
     current_dir = os.getcwd()
     parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
