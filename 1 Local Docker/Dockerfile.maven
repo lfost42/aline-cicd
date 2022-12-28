@@ -1,9 +1,13 @@
 # Specifies maven 3.6.3 on top of JDK 11 slim as the base image.
-FROM maven:3.6.3-jdk-11-slim as build
+FROM maven:3.6.3-jdk-11-slim as builder
+
+# Specifies name and version
+LABEL Name="Dockerfile.maven" version="1.4"
 
 # Defines a build argument which can be used to specify the directory 
 # containing the Java application.
 ARG APP_DIR
+ENV APP_DIR=${APP_DIR}
 
 # Copies project files to the `/maven_app` directory in the Docker image.
 COPY . /maven_app
@@ -12,31 +16,30 @@ COPY . /maven_app
 WORKDIR /maven_app
 
 # Compiles maven package
-RUN mvn package -DskipTests=true
+RUN ["mvn", "package", "-DskipTests=true"]
 
-COPY ${TARGET} /target/
+# Second stage build
+FROM openjdk:8-jre-alpine
+
+# Specifies name and version
+LABEL Name="Dockerfile.maven" version="1.4"
+
+# Sets arg and env variables
+ARG APP_DIR
+ENV APP_DIR=${APP_DIR}
+
+# Copies the contents of the `${TARGET}` directory which is the build output
+# directory of the Maven project to the `/maven_app` directory in the Docker 
+# image.
+COPY --from=builder ["/maven_app/${APP_DIR}/*.jar", "/root/app.jar"]
+
+WORKDIR /root
 
 # All ports the microservices built with this dockerfile may listen to
-EXPOSE 8070 8071 8072 8073 8080 8083 8084
+EXPOSE 8080 8070 8071 8072 8073 8083 8084
 
-# Runs maven app (first stage)
-CMD java -jar ${APP_DIR}/target/*.jar
+# Starts the Java application by running the `*.jar` file in the `target` directory.
+CMD ["java", "-jar", "app.jar"]
 
-# # Second stage build
-# FROM maven:3.6.3-jdk-11-slim
-
-# # Specifies name and version
-# LABEL Name="Dockerfile.maven" version="1.1"
-
-# # Copies the contents of the `${TARGET}` directory which is the build output
-# # directory of the Maven project to the `/maven_app` directory in the Docker 
-# # image.
-# COPY --from=build /target /maven_target
-
-# WORKDIR /maven_target
-
-# # All ports the microservices built with this dockerfile may listen to
-# EXPOSE 8070 8071 8072 8073 8080 8083 8084
-
-# # Starts the Java application by running the `*.jar` file in the `target` directory.
-# CMD java -jar maven_target/*.jar
+# # keeps container running for debugging => docker exec -it 0ab99d8ab11c /bin/bash
+# ENTRYPOINT ["tail", "-f", "/dev/null"]

@@ -11,7 +11,9 @@ x-variables: &variables
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
 
 x-react-variables: &react-variables
-  REACT_APP_API: http://gateway:${GATEWAY_PORT}/api
+  REACT_APP_MEMBER_DASHBOARD_URL: http://localhost:${MEMBER_PORT}
+  REACT_APP_API_BASEURL: http://localhost:${GATEWAY_PORT}
+  REACT_APP_API: http://localhost:${GATEWAY_PORT}/api
 
 services:
   # Database
@@ -26,59 +28,47 @@ services:
       - db-data:/var/lib/mysql
     ports:
       - ${DB_PORT}:${DB_PORT}
-    # networks:
-    #   - backend
 
-  # # Frontend Projects
+  # Frontend Projects
   member:
     build:
       context: ./member-dashboard
       dockerfile: ../Dockerfile.node
     ports:
-      - ${MEMBER_PORT}:${MEMBER_PORT}
-    # networks:
-    #   - frontend
+      - ${MEMBER_PORT}:80
     environment:
-      - PORT=${MEMBER_PORT}
+      <<: *react-variables
 
   admin:
     build:
       context: ./aline-admin-portal
       dockerfile: ../Dockerfile.node
     ports:
-      - ${ADMIN_PORT}:${ADMIN_PORT}
-    # networks:
-    #   - frontend
+      - ${ADMIN_PORT}:80
     environment:
       <<: *react-variables
-      PORT: ${ADMIN_PORT}
 
   landing:
     build:
       context: ./aline-landing-portal
       dockerfile: ../Dockerfile.node
     ports:
-      - ${LANDING_PORT}:${LANDING_PORT}
-    # networks:
-    #   # - frontend
+      - ${LANDING_PORT}:80
     environment:
       <<: *react-variables
-      PORT: ${LANDING_PORT}
 
   # Maven Projects
   gateway:
     build:
       context: ./aline-gateway
       dockerfile: ../Dockerfile.maven
+      args:
+        - APP_DIR=./target
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}
-    # networks:
-    #   - backend
     environment:
       <<: *variables
-      APP_DIR: .
       APP_PORT: ${GATEWAY_PORT}
-      TARGET: ./aline-gateway/target
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
       interval: 30s
@@ -90,111 +80,83 @@ services:
     build:
       context: ./aline-account-microservice
       dockerfile: ../Dockerfile.maven
+      args:
+        - APP_DIR=./account-microservice/target
     depends_on:
       - mysql
     ports:
       - ${ACCOUNT_PORT}:${ACCOUNT_PORT}
-    # networks:
-    #   - backend
     environment:
       <<: *variables
-      APP_DIR: ./account-microservice
       APP_PORT: ${ACCOUNT_PORT}
-      TARGET: ./aline-account-microservice/account-microservice/target
-
   bank:
     build:
       context: ./aline-bank-microservice
       dockerfile: ../Dockerfile.maven
+      args:
+        - APP_DIR=./bank-microservice/target
     depends_on:
       - mysql
     ports:
       - ${BANK_PORT}:${BANK_PORT}
-    # networks:
-    #   - backend
     environment:
       <<: *variables
-      APP_DIR: ./bank-microservice
-      APP_PORT: ${BANK_PORT}
-      TARGET: /aline-bank-microservice/bank-microservice/target
 
   card:
     build:
       context: ./aline-card-microservice
       dockerfile: ../Dockerfile.maven
+      args:
+        - APP_DIR=./card-microservice/target
     depends_on:
       - mysql
     ports:
       - ${CARD_PORT}:${CARD_PORT}
-    # networks:
-    #   - backend
     environment:
       <<: *variables
-      APP_DIR: ./card-microservice
       APP_PORT: ${CARD_PORT}
-      TARGET: /aline-card-microservice/card-microservice/target
 
   transaction:
     build:
       context: ./aline-transaction-microservice
       dockerfile: ../Dockerfile.maven
+      args:
+        - APP_DIR=./transaction-microservice/target
     depends_on:
       - mysql
     ports:
       - ${TRANSACTION_PORT}:${TRANSACTION_PORT}
-    # networks:
-    #   - backend
     environment:
       <<: *variables
-      APP_DIR: ./transaction-microservice
       APP_PORT: ${TRANSACTION_PORT}
-      TARGET: /aline-transaction-microservice/transaction-microservice/target
 
   underwriter:
     build:
       context: ./aline-underwriter-microservice
       dockerfile: ../Dockerfile.maven
+      args:
+        - APP_DIR=./underwriter-microservice/target
     depends_on:
       - mysql
     ports:
       - ${UNDERWRITER_PORT}:${UNDERWRITER_PORT}
-    # networks:
-    #   - backend
     environment:
       <<: *variables
-      APP_DIR: ./underwriter-microservice
       APP_PORT: ${UNDERWRITER_PORT}
-      TARGET: /aline-underwriter-microservice/underwriter-microservice/target
 
   user:
     build:
       context: ./aline-user-microservice
       dockerfile: ../Dockerfile.maven
+      args:
+        - APP_DIR=./user-microservice/target
     depends_on:
       - mysql
     ports:
       - ${USER_PORT}:${USER_PORT}
-    # networks:
-    #   - backend
     environment:
       <<: *variables
-      APP_DIR: ./user-microservice
       APP_PORT: ${USER_PORT}
-      TARGET: /aline-user-microservice/user-microservice/target
 
 volumes:
   db-data:
-
-# networks:
-#   default:
-#     name: aline_default
-#     driver: overlay
-#     attachable: true
-#   frontend:
-#     name: aline_frontend
-#     driver: overlay
-#     attachable: true
-#   backend:
-#     name: aline_backend
-#     driver: overlay
-#     attachable: true
