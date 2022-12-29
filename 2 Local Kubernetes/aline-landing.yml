@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2022-12-29T07:17:01Z"
+  generation: 1
+  labels:
+    app: aline-landing
+  name: aline-landing
+  namespace: default
+  resourceVersion: "99309"
+  uid: 75adc091-1c8d-4530-b562-eb9d401270ab
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: aline-landing
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: aline-landing
+    spec:
+      containers:
+      - image: lyndasm/aline-landing
+        imagePullPolicy: Always
+        name: aline-landing
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2022-12-29T07:17:03Z"
+    lastUpdateTime: "2022-12-29T07:17:03Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2022-12-29T07:17:01Z"
+    lastUpdateTime: "2022-12-29T07:17:03Z"
+    message: ReplicaSet "aline-landing-847f8bb79f" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
