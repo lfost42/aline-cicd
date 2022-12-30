@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aline-bank
+  annotations:
+    cluster-name: aline-financial
+spec:
+  selector:
+    matchLabels:
+      app: aline-bank
+  template:
+    metadata:
+      labels:
+        app: aline-bank
+    spec:
+      containers:
+      - name: aline-bank
+        image: lyndasm/aline-bank-microservice
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8083

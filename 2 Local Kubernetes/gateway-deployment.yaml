@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aline-gateway
+  annotations:
+    cluster-name: aline-financial
+spec:
+  selector:
+    matchLabels:
+      app: aline-gateway
+  template:
+    metadata:
+      labels:
+        app: aline-gateway
+    spec:
+      containers:
+      - name: aline-gateway
+        image: lyndasm/aline-gateway
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080

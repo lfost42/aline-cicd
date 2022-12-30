@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aline-underwriter
+  annotations:
+    cluster-name: aline-financial
+spec:
+  selector:
+    matchLabels:
+      app: aline-underwriter
+  template:
+    metadata:
+      labels:
+        app: aline-underwriter
+    spec:
+      containers:
+      - name: aline-underwriter
+        image: lyndasm/aline-underwriter-microservice
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8071
