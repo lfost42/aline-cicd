@@ -14,8 +14,11 @@ Localized containerization is a way of packaging our web application, along with
 ## Installation
 
 # Requirements:
+
 [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
 [VS Code](https://code.visualstudio.com)
+
 [Docker extension](https://code.visualstudio.com/docs/containers/overview)
 
 ### Clone repo files:
@@ -26,13 +29,13 @@ Localized containerization is a way of packaging our web application, along with
 
 ### Build Docker Images and run Docker Compose
 
-1. Follow the steops in `Clone repo files above` if you do not have `Aline Financial` repo files. 
+1. Follow the steps in `Clone repo files above` if you do not have `Aline Financial` repo files. 
 2. From the `docker` folder, move the following files to the parent `Aline Financial folder` you created in step 2. 
 `Dockerfile.maven`
 `Dockerfile.node`
 `docker-compose.yml`
 `setup.py`
-`.env` (the one you created in step 1)
+`.env` (the one you created in `Clone reop files:` step 1)
 3. run `setup.py`:
 - `py setup.py` or `python3 setup.py`
 4. run `docker-compose.yml`
@@ -40,10 +43,9 @@ Localized containerization is a way of packaging our web application, along with
 - b. select `Compose Up` to run all services or select `Compose Up - Select Services` to build/run a subset of microservices.
 
 ### Kubernetes Local
-1. CD into the Kubernetes folder.
-2. Apply all manifest files.
-`kubectl apply -f .`
+1. Pull docker hub repo images:
 
+`docker pull lyndasm/aline --all-tags`
 
 ## Support
 
@@ -91,4 +93,4 @@ With support from the Cyber Cumulus Team:
 [MIT License](LICENSE.md)
 
 ## Project status
-Local containerization.
+Local Containerization and Automation

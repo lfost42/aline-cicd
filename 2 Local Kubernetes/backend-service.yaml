@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-ingress
+spec:
+  type: ClusterIP
+  selector:
+    app: aline-backend
+  ports:
+  - name: account-port
+    protocol: TCP
+    port: 8072
+    targetPort: 8072
+  - name: bank-port
+    protocol: TCP
+    port: 8083
+    targetPort: 8083
+  - name: card-port
+    protocol: TCP
+    port: 8084
+    targetPort: 8084
+  - name: transaction-port
+    protocol: TCP
+    port: 8073
+    targetPort: 8073
+  - name: underwriter-port
+    protocol: TCP
+    port: 8071
+    targetPort: 8071
+  - name: user-port
+    protocol: TCP
+    port: 8070
+    targetPort: 8070

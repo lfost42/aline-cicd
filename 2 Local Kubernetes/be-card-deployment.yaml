@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    aline.service: card
+  name: card
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      aline.service: card
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        aline.service: card
+    spec:
+      containers:
+      - name: card
+        image: lyndasm/aline-card-microservice
+        ports:
+          - containerPort: 8084
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+      restartPolicy: Always
