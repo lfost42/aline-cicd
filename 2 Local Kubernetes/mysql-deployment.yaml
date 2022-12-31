@@ -1,27 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aline-mysql
-  annotations:
-    cluster-name: aline-financial
+  labels:
+    aline.service: mysql
+  name: mysql
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: aline-mysql
+      aline.service: mysql
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app: aline-mysql
+        aline.service: mysql
     spec:
       containers:
-      - name: aline-mysql
+      - name: mysql
         image: lyndasm/aline-mysql
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "100m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
-        - containerPort: 3306
+          - containerPort: 8072
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+        volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: db-data
+      restartPolicy: Always
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    aline.service: mysql
+  name: mysql
+spec:
+  ports:
+    - name: mysql-port
+      port: 3306
+      targetPort: 3306
+  selector:
+    aline.service: mysql

@@ -1,27 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aline-landing
-  annotations:
-    cluster-name: aline-financial
+  labels:
+    aline.service: landing
+  name: landing
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: aline-landing
+      aline.service: landing
   template:
     metadata:
       labels:
-        app: aline-landing
+        aline.service: landing
     spec:
       containers:
-      - name: aline-landing
+      - name: landing
         image: lyndasm/aline-landing
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "100m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
-        - containerPort: 4200
+          - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    aline.service: landing
+  name: landing
+spec:
+  ports:
+    - name: landing
+      port: 4200
+      targetPort: 80
+  selector:
+    aline.service: landing

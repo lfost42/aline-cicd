@@ -1,27 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aline-account
-  annotations:
-    cluster-name: aline-financial
+  labels:
+    aline.service: account
+  name: account
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: aline-account
+      aline.service: account
   template:
     metadata:
       labels:
-        app: aline-account
+        aline.service: account
     spec:
       containers:
-      - name: aline-account
+      - name: account
         image: lyndasm/aline-account-microservice
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "100m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
-        - containerPort: 8071
+          - containerPort: 8072
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    aline.service: account
+  name: account
+spec:
+  ports:
+    - name: account-port
+      port: 8072
+      targetPort: 8072
+  selector:
+    aline.service: account
