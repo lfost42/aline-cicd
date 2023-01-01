@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: transaction-deployment
-  namespace: transaction
 spec:
   replicas: 1
   selector:
