@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: card-deployment
-  namespace: card
 spec:
   replicas: 1
   selector:
