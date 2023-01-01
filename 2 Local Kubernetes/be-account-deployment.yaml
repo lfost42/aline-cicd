@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: account-deployment
+  namespace: account
 spec:
   replicas: 1
   selector:
@@ -18,7 +19,7 @@ spec:
         aline.component: server
     spec:
       containers:
-      - name: account
+      - name: bank
         image: lyndasm/aline-account-microservice
         ports:
           - containerPort: 8072

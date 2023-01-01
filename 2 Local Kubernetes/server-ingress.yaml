@@ -1,101 +1,107 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: account
+  name: account-ingress
+  namespace: account
 spec:
   rules:
-  - host: account.alinefinancial.com
+  - host: account.aline.127.0.0.1.nip.io
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: account
+            name: account-service
             port: 
-              number: 8080
+              number: 8072
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: bank
+  name: bank-ingress
+  namespace: bank
 spec:
   rules:
-  - host: bank.alinefinancial.com
+  - host: bank.aline.127.0.0.1.nip.io
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: bank
+            name: bank-service
             port: 
-              number: 8080
+              number: 8083
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: card
+  name: card-ingress
+  namespace: card
 spec:
   rules:
-  - host: card.alinefinancial.com
+  - host: card.aline.127.0.0.1.nip.io
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: card
+            name: card-service
             port: 
-              number: 8080
+              number: 8084
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: transaction
+  name: transaction-ingress
+  namespace: transaction
 spec:
   rules:
-  - host: transaction.alinefinancial.com
+  - host: transaction.aline.127.0.0.1.nip.io
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: transaction
+            name: transaction-service
             port: 
-              number: 8080
+              number: 8073
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: underwriter
+  name: underwriter-ingress
+  namespace: underwriter
 spec:
   rules:
-  - host: underwriter.alinefinancial.com
+  - host: underwriter.aline.127.0.0.1.nip.io
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: underwriter
+            name: underwriter-service
             port: 
-              number: 8080
+              number: 8071
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: user
+  name: user-ingress
+  namespace: user
 spec:
   rules:
-  - host: user.alinefinancial.com
+  - host: user.aline.127.0.0.1.nip.io
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: user
+            name: user-service
             port: 
-              number: 8080
+              number: 8070

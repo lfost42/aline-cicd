@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: account
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bank
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: card
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: transaction
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: underwriter
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: user
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: admin
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: landing
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: member
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gateway
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mysql
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: db-data

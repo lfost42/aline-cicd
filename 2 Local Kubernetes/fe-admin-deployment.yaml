@@ -1,9 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    aline.component: client-deployment
-  name: admin
+  name: admin-deployment
+  namespace: admin
 spec:
   replicas: 1
   selector:
