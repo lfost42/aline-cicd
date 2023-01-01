@@ -1,14 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    aline.service: underwriter
-  name: underwriter
+  name: underwriter-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.service: underwriter
+      aline.component: server
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -17,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        aline.service: underwriter
+        aline.component: server
     spec:
       containers:
       - name: underwriter

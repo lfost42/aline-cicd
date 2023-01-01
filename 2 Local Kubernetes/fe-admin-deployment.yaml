@@ -2,13 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    aline.service: admin
+    aline.component: client-deployment
   name: admin
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.service: admin
+      aline.component: client
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       labels:
-        aline.service: admin
+        aline.component: client
     spec:
       containers:
       - name: admin

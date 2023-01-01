@@ -2,8 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: account
-  labels:
-    name: account
 spec:
   rules:
   - host: account.alinefinancial.com
@@ -21,8 +19,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: bank
-  labels:
-    name: bank
 spec:
   rules:
   - host: bank.alinefinancial.com
@@ -32,7 +28,7 @@ spec:
         path: "/"
         backend:
           service:
-            name: account
+            name: bank
             port: 
               number: 8080
 ---
@@ -40,8 +36,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: card
-  labels:
-    name: card
 spec:
   rules:
   - host: card.alinefinancial.com
@@ -51,7 +45,7 @@ spec:
         path: "/"
         backend:
           service:
-            name: account
+            name: card
             port: 
               number: 8080
 ---
@@ -59,8 +53,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: transaction
-  labels:
-    name: transaction
 spec:
   rules:
   - host: transaction.alinefinancial.com
@@ -78,8 +70,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: underwriter
-  labels:
-    name: underwriter
 spec:
   rules:
   - host: underwriter.alinefinancial.com
@@ -97,8 +87,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: user
-  labels:
-    name: user
 spec:
   rules:
   - host: user.alinefinancial.com

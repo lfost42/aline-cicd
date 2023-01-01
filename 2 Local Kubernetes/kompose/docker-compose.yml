@@ -1,0 +1,76 @@
+version: "3.8"
+
+volumes:
+  db-data:
+
+services:
+  aline-mysql:
+    image: lyndasm/aline-mysql
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  # frontend services
+  aline-member:
+    image: lyndasm/aline-member
+    ports:
+      - 3007:80
+
+  aline-admin:
+    image: lyndasm/aline-admin
+    ports:
+      - 3000:80
+
+  aline-landing:
+    image: lyndasm/aline-landing
+    ports:
+      - 4200:80
+
+  # backend services
+  aline-gateway:
+    image: lyndasm/aline-gateway
+    ports:
+      - 8080:8080
+
+  aline-account-microservice:
+    image: lyndasm/aline-account-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8072:8072
+
+  aline-bank-microservice:
+    image: lyndasm/aline-bank-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8083:8083
+
+  aline-card-microservice:
+    image: lyndasm/aline-card-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8084:8084
+
+  aline-transaction-microservice:
+    image: lyndasm/aline-transaction-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8073:8073
+
+  aline-underwriter-microservice:
+    image: lyndasm/aline-underwriter-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8071:8071
+
+  aline-user-microservice:
+    image: lyndasm/aline-user-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8070:8070

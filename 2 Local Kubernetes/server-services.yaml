@@ -1,0 +1,78 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-service
+spec:
+  ports:
+  - name: http
+    targetPort: 8072
+    port: 8072
+  selector:
+    aline.component: client
+    task: account
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-service
+spec:
+  ports:
+  - name: http
+    targetPort: 8083
+    port: 8083
+  selector:
+    aline.component: client
+    task: bank
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: card-service
+spec:
+  ports:
+  - name: http
+    targetPort: 8084
+    port: 8084
+  selector:
+    aline.component: client
+    task: card
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-service
+spec:
+  ports:
+  - name: http
+    targetPort: 8073
+    port: 8073
+  selector:
+    aline.component: client
+    task: transaction
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: underwriter-service
+spec:
+  ports:
+  - name: http
+    targetPort: 8071
+    port: 8071
+  selector:
+    aline.component: client
+    task: underwriter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  ports:
+  - name: http
+    targetPort: 8070
+    port: 8070
+  selector:
+    aline.component: client
+    task: user
