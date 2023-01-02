@@ -4,11 +4,11 @@ metadata:
   name: account-ingress
 spec:
   rules:
-  - host: account.aline.127.0.0.1.nip.io
+  - host: alinefinancial.com
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: "/account"
         backend:
           service:
             name: account-service
@@ -21,11 +21,11 @@ metadata:
   name: bank-ingress
 spec:
   rules:
-  - host: bank.aline.127.0.0.1.nip.io
+  - host: alinefinancial.com
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: "/bank"
         backend:
           service:
             name: bank-service
@@ -38,11 +38,11 @@ metadata:
   name: card-ingress
 spec:
   rules:
-  - host: card.aline.127.0.0.1.nip.io
+  - host: alinefinancial.com
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: "/card"
         backend:
           service:
             name: card-service
@@ -55,11 +55,11 @@ metadata:
   name: transaction-ingress
 spec:
   rules:
-  - host: transaction.aline.127.0.0.1.nip.io
+  - host: alinefinancial.com
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: "/transaction"
         backend:
           service:
             name: transaction-service
@@ -72,11 +72,11 @@ metadata:
   name: underwriter-ingress
 spec:
   rules:
-  - host: underwriter.aline.127.0.0.1.nip.io
+  - host: alinefinancial.com
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: "/underwriter"
         backend:
           service:
             name: underwriter-service
@@ -89,11 +89,11 @@ metadata:
   name: user-ingress
 spec:
   rules:
-  - host: user.aline.127.0.0.1.nip.io
+  - host: alinefinancial.com
     http:
       paths:
       - pathType: Prefix
-        path: "/"
+        path: "/user"
         backend:
           service:
             name: user-service

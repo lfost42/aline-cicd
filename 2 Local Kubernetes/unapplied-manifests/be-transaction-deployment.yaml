@@ -22,6 +22,19 @@ spec:
         image: lyndasm/aline-transaction-microservice
         ports:
           - containerPort: 8073
+        env:
+        - name: DB_USERNAME
+          value: user
+        - name: DB_PASSWORD
+          value: ${DB_PASSWORD}
+        - name: DB_HOST
+          value: mysql
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: alinedb
+        - name: APP_SERVICE_HOST
+          value: host.docker.internal
         resources:
           limits:
             cpu: "500m"
