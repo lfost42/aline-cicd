@@ -26,7 +26,10 @@ spec:
         - name: DB_USERNAME
           value: user
         - name: DB_PASSWORD
-          value: ${DB_PASSWORD}
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: DB_PASSWORD
         - name: DB_HOST
           value: mysql
         - name: DB_PORT

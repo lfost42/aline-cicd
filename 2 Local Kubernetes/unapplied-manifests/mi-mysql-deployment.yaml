@@ -19,6 +19,12 @@ spec:
         image: lyndasm/aline-mysql
         ports:
           - containerPort: 3306
+        env:
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-password
+                key: DB_PASSWORD
         resources:
           limits:
             cpu: "500m"
