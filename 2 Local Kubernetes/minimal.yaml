@@ -6,8 +6,11 @@
 
 # 3. Modify /etc/hosts to add `alinefinancial.com` to localhost.
 
-# 4. Landing should be accessible at 
-# `alinefinancial.com`
+# 4. pages should be accessible at 
+# `alinefinancial.com/landing` and `alinefinancial.com/member`
+
+# 5. Remove pods when done
+# `kubectl delete -f .`
 ---
 apiVersion: v1
 kind: Namespace
@@ -24,10 +27,12 @@ spec:
   selector:
     matchLabels:
       aline.component: client
+      app: landing
   template:
     metadata:
       labels:
         aline.component: client
+        app: landing
     spec:
       containers:
       - name: landing
@@ -36,19 +41,59 @@ spec:
           - containerPort: 4200
         resources: {}
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: member-deployment
+  namespace: aline
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      aline.component: client
+      app: member
+  template:
+    metadata:
+      labels:
+        aline.component: client
+        app: member
+    spec:
+      containers:
+      - name: member
+        image: lyndasm/aline-member
+        ports:
+          - containerPort: 3007
+        resources: {}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: client-cluster-ip-service
+  name: landing-service
+  namespace: aline
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     aline.component: client
   ports:
-  - name: landing-port
-    protocol: TCP
-    port: 4200
-    targetPort: 80
+    - protocol: TCP
+      name: landing
+      port: 80
+      targetPort: 4200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: member-service
+  namespace: aline
+spec:
+  type: LoadBalancer
+  selector:
+    aline.component: client
+  ports:
+    - protocol: TCP
+      name: member
+      port: 80
+      targetPort: 3007
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -67,6 +112,20 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: client-cluster-ip-service
+                name: landing-service
+                port:
+                  number: 80
+          - path: /landing
+            pathType: Prefix
+            backend:
+              service:
+                name: landing-service
+                port:
+                  number: 80
+          - path: /member
+            pathType: Prefix
+            backend:
+              service:
+                name: member-service
                 port:
                   number: 80

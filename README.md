@@ -43,9 +43,16 @@ Localized containerization is a way of packaging our web application, along with
 - b. select `Compose Up` to run all services or select `Compose Up - Select Services` to build/run a subset of microservices.
 
 ### Kubernetes Local
-1. Pull docker hub repo images:
+1. Import the nginx ingress controller
+`kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml`
 
-`docker pull lyndasm/aline --all-tags`
+2. Apply manifest files
+`kubectl apply -f .`
+
+3. Modify /etc/hosts to add `alinefinancial.com` to localhost.
+
+4. Landing should be accessible at 
+`alinefinancial.com/landing`
 
 ## Support
 
