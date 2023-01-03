@@ -84,3 +84,6 @@ spec:
           #       name: member-service
           #       port:
           #         number: 80
+
+# I can port-forward landing-deployment... 4200:80 and view the site on my localhost.
+# http://127.0.0.1:4200/ but alinelanding.com is giving me a bad gateway
