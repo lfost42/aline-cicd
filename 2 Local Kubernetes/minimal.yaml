@@ -74,6 +74,7 @@ spec:
   type: LoadBalancer
   selector:
     aline.component: client
+    app: landing
   ports:
     - protocol: TCP
       name: landing
@@ -89,6 +90,7 @@ spec:
   type: LoadBalancer
   selector:
     aline.component: client
+    app: member
   ports:
     - protocol: TCP
       name: member
