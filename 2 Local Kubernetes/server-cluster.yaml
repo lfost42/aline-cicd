@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: server-cluster
+  name: server-cluster-ip
   namespace: aline
   labels:
     aline.component: server-cluster-ip
