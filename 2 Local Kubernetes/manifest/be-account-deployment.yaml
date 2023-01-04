@@ -41,7 +41,16 @@ spec:
           value: alinedb
         - name: APP_SERVICE_HOST
           value: server-cluster-ip
-
+        - name: ENCRYPT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key:  ENCRYPT_SECRET_KEY
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key:  JWT_SECRET_KEY
         resources:
           limits:
             cpu: "500m"
