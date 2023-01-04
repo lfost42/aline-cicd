@@ -43,16 +43,14 @@ Localized containerization is a way of packaging our web application, along with
 - b. select `Compose Up` to run all services or select `Compose Up - Select Services` to build/run a subset of microservices.
 
 ### Kubernetes Local
-1. Import the nginx ingress controller
+1. Apply nginx Ingress Controller
 `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml`
-
-2. Apply manifest files
+2. Apply mysql secret for MYSQL_PASSWORD
+`kubectl create secret generic mysql-password --from-literal DB_PASSWORD=your_password`
+3. Create namespace
+`kubectl create namespace aline`
+4. Apply manifest files. In k8 folder:
 `kubectl apply -f .`
-
-3. Modify /etc/hosts to add `alinefinancial.com` to localhost.
-
-4. Landing should be accessible at 
-`alinefinancial.com/landing`
 
 ## Support
 
@@ -66,7 +64,7 @@ lynda.foster@smoothstack.com<br>
 - [x] Local Containerization and Automation
     - [x] Dockerize Images
     - [x] Docker Compose Local
-    - [x] Kubernetes Pod Local -- in progress
+    - [x] Kubernetes Pod Local
     - [ ] Jenkins Pipelines
     - [ ] Jenkins Integration with Sonarqube
 

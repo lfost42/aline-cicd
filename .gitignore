@@ -5,7 +5,7 @@ venv/
 config.yaml
 **config.yaml
 my-config/
-
+*notes/
 aline-account-microservice/
 aline-bank-microservice/
 aline-card-microservice/

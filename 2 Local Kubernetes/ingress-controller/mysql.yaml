@@ -1,1 +1,0 @@
-# kubectl create secret generic mysql-password --from-literal DB_PASSWORD=really_good_password

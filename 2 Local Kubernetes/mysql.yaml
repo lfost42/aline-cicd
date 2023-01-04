@@ -30,7 +30,7 @@ spec:
         aline.component: mysql
     spec:
       containers:
-      - image: mysql/mysql-server:8.0.23
+      - image: lyndasm/aline-mysql:kubernetes
         name: mysql
         ports:
           - containerPort: 3306

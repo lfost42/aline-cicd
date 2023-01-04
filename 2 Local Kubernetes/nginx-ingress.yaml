@@ -21,7 +21,7 @@ spec:
           path: "/api"
           backend:
             service:
-              name: cluster-ip-service
+              name: server-cluster
               port: 
                 number: 8080
     - host: alinefinancial.com
