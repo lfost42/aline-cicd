@@ -40,7 +40,7 @@ spec:
         - name: DB_NAME
           value: alinedb
         - name: APP_SERVICE_HOST
-          value: alinefinancial.com
+          value: server-cluster-ip
         - name: PORTAL_LANDING
           value: alinefinancial.com
         - name: PORTAL_DASHBOARD

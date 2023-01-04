@@ -40,7 +40,7 @@ spec:
         - name: DB_NAME
           value: alinedb
         - name: APP_SERVICE_HOST
-          value: alinefinancial.com
+          value: server-cluster-ip
         resources:
           limits:
             cpu: "500m"
