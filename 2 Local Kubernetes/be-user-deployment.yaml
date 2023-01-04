@@ -40,7 +40,7 @@ spec:
         - name: DB_NAME
           value: alinedb
         - name: APP_SERVICE_HOST
-          value: host.docker.internal
+          value: alinefinancial.com
         resources:
           limits:
             cpu: "500m"

@@ -71,7 +71,7 @@ spec:
             - name: DB_NAME
               value: alinedb
             - name: APP_SERVICE_HOST
-              value: host.docker.internal
+              value: alinefinancial.com
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
