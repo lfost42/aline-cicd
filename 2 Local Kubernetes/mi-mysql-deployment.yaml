@@ -16,11 +16,11 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: lyndasm/aline-mysql
+        image: lyndasm/aline-mysql:kubernetes
         ports:
           - containerPort: 3306
         env:
-          - name: DB_PASSWORD
+          - name: MYSQL_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: mysql-password
