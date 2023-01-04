@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: landing-deployment
+  name: member-deployment
   namespace: aline
 spec:
   replicas: 1
@@ -19,10 +19,10 @@ spec:
         aline.component: client
     spec:
       containers:
-      - name: landing
-        image: lyndasm/aline-landing
+      - name: member
+        image: lyndasm/aline-member
         ports:
-          - containerPort: 4200
+          - containerPort: 80
         env:
           - name: REACT_APP_API_BASEURL
             value: http://localhost:8080
