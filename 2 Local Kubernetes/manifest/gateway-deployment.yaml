@@ -40,7 +40,13 @@ spec:
         - name: DB_NAME
           value: alinedb
         - name: APP_SERVICE_HOST
-          value: host.docker.internal
+          value: alinefinancial.com
+        - name: PORTAL_LANDING
+          value: alinefinancial.com
+        - name: PORTAL_DASHBOARD
+          value: member.alinefinancial.com
+        - name: PORTAL_ADMIN
+          value: admin.alinefinancial.com
         resources:
           limits:
             cpu: "500m"
