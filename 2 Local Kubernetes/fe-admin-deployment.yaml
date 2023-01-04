@@ -3,11 +3,13 @@ kind: Deployment
 metadata:
   name: admin-deployment
   namespace: aline
+  labels:
+    aline.component: admin
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: client
+      aline.component: admin
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -16,13 +18,13 @@ spec:
   template:
     metadata:
       labels:
-        aline.component: client
+        aline.component: admin
     spec:
       containers:
       - name: admin
         image: lyndasm/aline-admin
         ports:
-          - containerPort: 80
+          - containerPort: 3000
         env:
           - name: REACT_APP_API_BASEURL
             value: http://localhost:8080
