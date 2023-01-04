@@ -2,11 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-deployment
+  namespace: aline
+  labels:
+    aline.component: user
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: server
+      aline.component: user
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -15,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        aline.component: server
+        aline.component: user
     spec:
       containers:
       - name: user

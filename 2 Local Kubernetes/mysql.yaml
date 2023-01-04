@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: aline
+spec:
+  ports:
+    - name: mysql-service
+      port: 3306
+      targetPort: 3306
+  selector:
+    aline.component: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  namespace: aline
+  labels:
+    aline.component: mysql
+spec:
+  selector:
+    matchLabels:
+      aline.component: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        aline.component: mysql
+    spec:
+      containers:
+      - image: mysql/mysql-server:8.0.23
+        name: mysql
+        ports:
+          - containerPort: 3306
+            name: mysql
+        env:
+          - name: DB_USERNAME
+            value: user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-password
+                key: DB_PASSWORD
+          - name: DB_HOST
+            value: mysql
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_NAME
+            value: alinedb
+          - name: APP_SERVICE_HOST
+            value: host.docker.internal
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-password
+                key: DB_PASSWORD
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+        volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
+      restartPolicy: Always
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  namespace: aline
+  labels:
+    aline.component: mysql
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  namespace: aline
+  labels:
+    aline.component: mysql
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
