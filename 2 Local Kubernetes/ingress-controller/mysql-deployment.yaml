@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql-deployment
+  labels:
+    aline.component: mysql
 spec:
   replicas: 1
   selector:
@@ -19,6 +21,7 @@ spec:
         image: lyndasm/aline-mysql:kubernetes
         ports:
           - containerPort: 3306
+            name: mysql
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
@@ -29,16 +32,13 @@ spec:
           limits:
             cpu: "500m"
             memory: "1Gi"
-          requests:
-            cpu: "200m"
-            memory: "512Mi"
         volumeMounts:
           - mountPath: /var/lib/mysql
-            name: db-data
+            name: mysql-persistent-storage
             subPath: mysql
       restartPolicy: Always
       volumes:
-        - name: db-data
+        - name: mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: db-data
+            claimName: mysql-pvc
 
