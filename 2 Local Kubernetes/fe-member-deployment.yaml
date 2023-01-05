@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: member
-        image: lyndasm/aline-member
+        image: lyndasm/aline-member:kubernetes
         ports:
           - containerPort: 80
         resources:

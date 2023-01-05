@@ -9,6 +9,11 @@ WORKDIR /node_app
 # Copies package*.json files to working directory
 COPY ["package*.json", "/node_app"]
 
+# Add environment variables to image
+ENV REACT_APP_MEMBER_DASHBOARD_URL=${REACT_APP_MEMBER_DASHBOARD_URL}
+ENV REACT_APP_API_BASEURL=${REACT_APP_API_BASEURL}
+ENV REACT_APP_API=${REACT_APP_API_BASEURL}
+
 # Installs npm, python3, and dependencies
 RUN ["npm", "install", "-g", "npm@7.24.0"]
 RUN ["apk", "add", "--update", "python3", "make", "g++"]

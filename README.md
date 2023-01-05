@@ -21,6 +21,8 @@ Localized containerization is a way of packaging our web application, along with
 
 [Docker extension](https://code.visualstudio.com/docs/containers/overview)
 
+[Heml](https://helm.sh/docs/intro/install/)
+
 ### Clone repo files:
 1. Create a .env file and add values to each global variable listed in the env file.
 2. Create an `Aline Financial` parent folder. 
@@ -53,17 +55,23 @@ Localized containerization is a way of packaging our web application, along with
 `kubectl create secret generic encrypt-key --from-literal ENCRYPT_SECRET_KEY=001104a5cbe95ed3bff1495a1ae92a28 --namespace=aline`
 `kubectl create secret generic jwt-key --from-literal JWT_SECRET_KEY=my-32-character-ultra-secure-and-ultra-long-secret --namespace=aline`
 
-4. Apply manifest files. In `k8s` folder:
+4. Install bitnami
+`helm repo add my-repo https://charts.bitnami.com/bitnami`
+
+5. Apply mysql-bn
+`helm install mysql my-repo/mysql --values mysql-bn.yaml`
+
+6. Apply manifest files. In `k8s` folder:
 `kubectl apply -f .`
 
-5. Update /etc/localhosts to add:
+7. Update /etc/localhosts to add:
 `127.0.0.1 alinefinancial.com`
 `127.0.0.1 landing.alinefinancial.com`
 `127.0.0.1 member.alinefinancial.com`
 `127.0.0.1 admin.alinefinancial.com`
 `127.0.0.1 api.alinefinancial.com`
 
-6. Website is accessible through alinefinancial.com. 
+8. Explore app through alinefinancial.com. 
 
 ## Support
 
@@ -78,7 +86,7 @@ lynda.foster@smoothstack.com<br>
     - [x] Dockerize Images
     - [x] Docker Compose Local
     - [x] Kubernetes Pod Local
-    - [x] Jenkins Pipelines -- in progress
+    - [ ] Jenkins Pipelines
     - [ ] Jenkins Integration with Sonarqube
 
 - [ ] Docker CI/CD
