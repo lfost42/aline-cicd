@@ -45,12 +45,25 @@ Localized containerization is a way of packaging our web application, along with
 ### Kubernetes Local
 1. Apply nginx Ingress Controller
 `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml`
-2. Apply mysql secret for MYSQL_PASSWORD
-`kubectl create secret generic mysql-password --from-literal DB_PASSWORD=your_password`
-3. Create namespace
+2. Create namespace
 `kubectl create namespace aline`
-4. Apply manifest files. In k8 folder:
+
+3. Apply secrets for MYSQL_PASSWORD and secret keys within the aline namespace.
+`kubectl create secret generic mysql-password --from-literal DB_PASSWORD=really_good_password --namespace=aline`
+`kubectl create secret generic encrypt-key --from-literal ENCRYPT_SECRET_KEY=001104a5cbe95ed3bff1495a1ae92a28 --namespace=aline`
+`kubectl create secret generic jwt-key --from-literal JWT_SECRET_KEY=my-32-character-ultra-secure-and-ultra-long-secret --namespace=aline`
+
+4. Apply manifest files. In `k8s` folder:
 `kubectl apply -f .`
+
+5. Update /etc/localhosts to add:
+`127.0.0.1 alinefinancial.com`
+`127.0.0.1 landing.alinefinancial.com`
+`127.0.0.1 member.alinefinancial.com`
+`127.0.0.1 admin.alinefinancial.com`
+`127.0.0.1 api.alinefinancial.com`
+
+6. Website is accessible through alinefinancial.com. 
 
 ## Support
 
@@ -65,7 +78,7 @@ lynda.foster@smoothstack.com<br>
     - [x] Dockerize Images
     - [x] Docker Compose Local
     - [x] Kubernetes Pod Local
-    - [ ] Jenkins Pipelines
+    - [x] Jenkins Pipelines -- in progress
     - [ ] Jenkins Integration with Sonarqube
 
 - [ ] Docker CI/CD
