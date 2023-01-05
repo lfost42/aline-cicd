@@ -27,9 +27,11 @@ spec:
           - containerPort: 80
         env:
           - name: REACT_APP_API_BASEURL
-            value: http://localhost:8080
+            value: http://api.alinefinancial.com
           - name: REACT_APP_API
-            value: http://localhost:8080/api
+            value: http://api.alinefinancial.com/api/
+          - name: REACT_APP_MEMBER_DASHBOARD_URL
+            value: http://member.alinefinancial.com
         resources:
           limits:
             cpu: "500m"

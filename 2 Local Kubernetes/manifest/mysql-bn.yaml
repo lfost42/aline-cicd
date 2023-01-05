@@ -1,0 +1,8 @@
+auth:
+  rootPassword: really_good_password
+  database: alinedb
+  username: user
+  password: really_good_password
+  
+namespaceOverride: aline
+# helm install mysql my-repo/mysql --values mysql-bn.yaml

@@ -4,7 +4,7 @@ metadata:
   name: server-cluster-ip
   namespace: aline
   labels:
-    aline.component: server-cluster-ip
+    aline.component: server
 spec:
   type: ClusterIP
   selector:

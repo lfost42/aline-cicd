@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: underwriter-deployment
+  name: account-deployment
   namespace: aline
   labels:
-    aline.component: underwriter
+    aline.component: server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: underwriter
+      aline.component: server
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,14 +18,16 @@ spec:
   template:
     metadata:
       labels:
-        aline.component: underwriter
+        aline.component: server
     spec:
       containers:
-      - name: underwriter
-        image: lyndasm/aline-underwriter-microservice
+      - name: bank
+        image: lyndasm/aline-account-microservice
         ports:
-          - containerPort: 8071
+          - containerPort: 8072
         env:
+        - name: APP_PORT
+          value: "8072"
         - name: DB_USERNAME
           value: user
         - name: DB_PASSWORD
@@ -39,17 +41,15 @@ spec:
           value: "3306"
         - name: DB_NAME
           value: alinedb
-        - name: APP_SERVICE_HOST
-          value: server-cluster-ip
         - name: ENCRYPT_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: mysql-password
+              name: encrypt-key
               key:  ENCRYPT_SECRET_KEY
         - name: JWT_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: mysql-password
+              name: jwt-key
               key:  JWT_SECRET_KEY
         resources:
           limits:

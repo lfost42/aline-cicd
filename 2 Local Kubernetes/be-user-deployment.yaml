@@ -4,12 +4,12 @@ metadata:
   name: user-deployment
   namespace: aline
   labels:
-    aline.component: user
+    aline.component: server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: user
+      aline.component: server
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,14 +18,17 @@ spec:
   template:
     metadata:
       labels:
-        aline.component: user
+        aline.component: server
     spec:
       containers:
       - name: user
         image: lyndasm/aline-user-microservice
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8070
         env:
+        - name: APP_PORT
+          value: "8070"
         - name: DB_USERNAME
           value: user
         - name: DB_PASSWORD
@@ -39,17 +42,15 @@ spec:
           value: "3306"
         - name: DB_NAME
           value: alinedb
-        - name: APP_SERVICE_HOST
-          value: server-cluster-ip
         - name: ENCRYPT_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: mysql-password
+              name: encrypt-key
               key:  ENCRYPT_SECRET_KEY
         - name: JWT_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: mysql-password
+              name: jwt-key
               key:  JWT_SECRET_KEY
         resources:
           limits:
