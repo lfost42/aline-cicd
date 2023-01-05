@@ -25,13 +25,6 @@ spec:
         image: lyndasm/aline-member
         ports:
           - containerPort: 80
-        env:
-          - name: REACT_APP_API_BASEURL
-            value: http://api.alinefinancial.com
-          - name: REACT_APP_API
-            value: http://api.alinefinancial.com/api/
-          - name: REACT_APP_MEMBER_DASHBOARD_URL
-            value: http://member.alinefinancial.com
         resources:
           limits:
             cpu: "500m"
