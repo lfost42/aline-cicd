@@ -7,4 +7,4 @@ auth:
 namespaceOverride: aline
 
 # helm repo add my-repo https://charts.bitnami.com/bitnami
-# helm install mysql my-repo/mysql --values mysql-bn.yaml
+# helm install mysql my-repo/mysql --values manifest/mysql-bn.yaml

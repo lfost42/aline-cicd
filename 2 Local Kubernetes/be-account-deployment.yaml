@@ -23,6 +23,7 @@ spec:
       containers:
       - name: bank
         image: lyndasm/aline-account-microservice
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8072
         env:

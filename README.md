@@ -55,11 +55,11 @@ Localized containerization is a way of packaging our web application, along with
 `kubectl create secret generic encrypt-key --from-literal ENCRYPT_SECRET_KEY=001104a5cbe95ed3bff1495a1ae92a28 --namespace=aline`
 `kubectl create secret generic jwt-key --from-literal JWT_SECRET_KEY=my-32-character-ultra-secure-and-ultra-long-secret --namespace=aline`
 
-4. Install bitnami
+4. Install [bitnami](https://github.com/bitnami/charts/tree/main/bitnami/mysql)
 `helm repo add my-repo https://charts.bitnami.com/bitnami`
 
 5. Apply mysql-bn
-`helm install mysql my-repo/mysql --values mysql-bn.yaml`
+`helm install mysql my-repo/mysql --values mainfest/mysql-bn.yaml`
 
 6. Apply manifest files. In `k8s` folder:
 `kubectl apply -f .`
@@ -89,10 +89,10 @@ lynda.foster@smoothstack.com<br>
     - [ ] Jenkins Pipelines
     - [ ] Jenkins Integration with Sonarqube
 
-- [ ] Docker CI/CD
+- [ ] Cloud Containerization
     - [ ] Docker Compose Cloud
-- [ ] Kubernetes CI/CD
     - [ ] Kubernetes Cloud EKS
+
 - [ ] Terraform CI/CD
     - [ ] Create Base Infrastructure
 - [ ] Jenkins CI/CD

@@ -23,6 +23,7 @@ spec:
       containers:
       - name: transaction
         image: lyndasm/aline-transaction-microservice
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8073
         env:

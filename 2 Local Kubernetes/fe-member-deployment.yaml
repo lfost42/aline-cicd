@@ -23,6 +23,7 @@ spec:
       containers:
       - name: member
         image: lyndasm/aline-member:kubernetes
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 80
         resources:
