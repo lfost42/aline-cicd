@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+    jenkins-worker:
+      image: jenksins/ssh-agent:jdk11
+      build:
+        context: ./
+        dockerfile: dockerfile.worker
+      restart: unless-stopped
+      privileged: true
+      user: root
+      container_name: jenkins-worker
+      expose:
+      - 22
+      networks:
+        jenkins:
+      environment:
+        - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC3t9GMI4Eawknu3BEF/uPgJKKQkc6y0lEUbH/dfvyzP0LBXf2vYuGEloMchR5wLi9vMEgqie4qyfhi3wqu55zP6bSO4eyYXF/9E+bIz8dfMz2Zz8yDhZzbS3ZcsMTQKNuwUYyIQl/vk2lAFu5ZGWP/RUOMNayZFdoGiU3vDUt47zC+IhnCAcdHWxSCxA5VizZbhKD38KPkZF5QZzuSLG3cS6lHceTl3Aa0Qede3smXQIQwpsisaA/ilMRhEHvMEFzTRK4tI3npXJpXbzyUAYbnVL/dIDpCqJ4a7tPs7CDXhtL27A524ekArDtqLXkH5XGhFNM4tz05V69nXNGHsrBwYIQA5ijDVGnhV0zjK9BKzMWoFTNNUvLzYxVIT06XhoEsFyBmYlYr/ykhxOVizZHiXcb6iwhMTNELp9DLuZOSEfG+JKOZYpWZeELx0/0mJ8vjvpr+7opreC/TQV7P7L+ez59AQarJSieanr8bQmogeXgPJ91rooGpWgw+m9t8rqs
+      volumes:
+      - ~/jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/local/bin/docker:/usr/local/bin/docker
+
+networks:
+  jenkins:
