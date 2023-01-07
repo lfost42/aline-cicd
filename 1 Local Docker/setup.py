@@ -1,5 +1,5 @@
-"""Prepares Aline Financial microservices Docker images by adding 
-submodules to each microservice and compile maven packages"""
+"""Adds submodules to each Aline Financial microservice"""
+
 import os
 
 # Get a list of files

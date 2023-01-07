@@ -1,9 +1,9 @@
 FROM jenkins/jenkins:2.385-jdk11
 USER root
 RUN set -eux && \
-    apt-get update && apt-get install -y wget \
+    apt-get update && \
+    apt-get install -y wget && \
     apt-get install -y docker.io docker-compose --no-install-recommends && \
-    apt-get install -y openjdk-8-jdk jenkins jenkins-cli && \
     rm -rf /var/lib/apt/lists/*
 RUN docker --version
 USER jenkins
