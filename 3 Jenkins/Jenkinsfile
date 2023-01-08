@@ -1,6 +1,11 @@
 def gv
 pipeline {
     agent any
+    environment {
+        GIT_COMMIT_HASH = getCommitSha()
+        registry = "lyndasm/demo-app"
+        registryCredential = 'docker-login'
+    }
     stages {
         stage('init') {
             steps {
@@ -30,12 +35,13 @@ pipeline {
                 }
             }
         }
-        stage('deploy') {
+        stage('push image') {
             steps {
                 script {
-                    gv.deploy()
+                    gv.pushImage()
                 }
             }
         }
+        
     }
 }

@@ -1,23 +1,24 @@
 def setup() {
-    echo "setting up application"
+    echo 'setting up application'
 }
 
 def build() {
-    echo "building the application"
+    echo 'building the application'
     sh 'python example.py'
 }
 
 def buildImage() {
-    echo "building docker image"
-    withCredentials([UsernamePassword(credentialsId: 'docker-UNPW', passwordVariable: 'PASS', UsernameVariable: 'USER')]) {
-        sh 'docker build -t lyndasm/demo-app:jma-2.0 .'
-        sh "echo $PASS | docker login -u $USER --password-stdin"
-        sh 'docker push lyndasm/demo-app:jma-2.0'
+    echo 'building docker image'
+    dockerImage = docker.build registry + ":$GIT_COMMIT_HASH"
+    echo 'image built'
     }
-}
 
-def deploy() {
-    echo "deploying the application"
+def pushImage() {
+    echo 'pushing image'
+    withCredentials([UsernamePassword(credentialsId: registryCredential, PasswordVariable: 'PASS', UsernameVariable: 'USER')]) {
+        sh "echo $PASS | docker login -u $USER --password-stdin"
+        sh "docker push " + dockerImage
+    }
 }
 
 return this
