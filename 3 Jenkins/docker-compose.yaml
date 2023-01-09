@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
     jenkins-server: 
-      image: jenkinsjenkins:lts
+      image: jenkins/jenkins:lts
       build: 
         context: ./
         dockerfile: dockerfile.server 
