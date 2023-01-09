@@ -4,7 +4,7 @@ def setup() {
 
 def build() {
     echo 'building the application'
-    sh 'python example.py'
+    
 }
 
 def buildImage() {
@@ -14,7 +14,7 @@ def buildImage() {
     }
 
 def pushImage() {
-    echo 'pushing image'
+    echo 'pushing image to registry'
     withCredentials([UsernamePassword(credentialsId: registryCredential, PasswordVariable: 'PASS', UsernameVariable: 'USER')]) {
         sh "echo $PASS | docker login -u $USER --password-stdin"
         sh "docker push " + dockerImage

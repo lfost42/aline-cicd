@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+    jenkins: 
+      platform: linux/x86_64
+      image: jenkins/jenkins:lts
+      build: 
+        context: ./
+        dockerfile: dockerfile 
+      restart: unless-stopped
+      privileged: true
+      user: root
+      ports:
+        - 8080:8080
+        - 50000:50000
+      container_name: jenkins
+      volumes:
+      - jdata:/var/jenkins_home
+      - jdata:/var/run/docker.sock:/var/run/docker.sock
+      networks:
+        jenkins:
+
+networks:
+  jenkins:
+
+volumes:
+  jdata:

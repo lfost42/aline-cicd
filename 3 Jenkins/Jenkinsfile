@@ -1,4 +1,4 @@
-def gv
+def app
 pipeline {
     agent any
     environment {
@@ -10,35 +10,35 @@ pipeline {
         stage('init') {
             steps {
                 script {
-                    gv = load "script.groovy"
+                    app = load "script.groovy"
                 }
             }
         }
         stage('setup') {
             steps {
                 script {
-                    gv.setup()
+                    app.setup()
                 }
             }
         }
         stage('build') {
             steps {
                 script {
-                    gv.build()
+                    app.build()
                 }
             }
         }
         stage('build image') {
             steps {
                 script {
-                    gv.buildImage()
+                    app.buildImage()
                 }
             }
         }
         stage('push image') {
             steps {
                 script {
-                    gv.pushImage()
+                    app.pushImage()
                 }
             }
         }
