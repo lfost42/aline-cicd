@@ -1,8 +1,9 @@
 auth:
-  rootPassword: really_good_password
   database: alinedb
   username: user
-  password: really_good_password
-  
+  # password: ""
+  # rootPassword: ""
+
 namespaceOverride: aline
+# helm repo add my-repo https://charts.bitnami.com/bitnami
 # helm install mysql my-repo/mysql --values mysql-bn.yaml

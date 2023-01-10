@@ -22,8 +22,7 @@ spec:
     spec:
       containers:
       - name: landing
-        image: lyndasm/aline-landing:kubernetes
-        imagePullPolicy: IfNotPresent
+        image: lyndasm/aline-landing
         ports:
           - containerPort: 80
         resources:

@@ -22,8 +22,7 @@ spec:
     spec:
       containers:
       - name: admin
-        image: lyndasm/aline-admin:kubernetes
-        imagePullPolicy: IfNotPresent
+        image: lyndasm/aline-admin
         ports:
           - containerPort: 3000
         resources:

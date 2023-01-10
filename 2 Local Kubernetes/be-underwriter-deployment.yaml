@@ -23,7 +23,6 @@ spec:
       containers:
       - name: underwriter
         image: lyndasm/aline-underwriter-microservice
-        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8071
         env:
