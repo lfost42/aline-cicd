@@ -1,0 +1,61 @@
+#!/usr/bin/env groovy
+@Library('lib-aline-node')
+def gv
+
+pipeline {
+    agent any
+    environment {
+        registry = "lyndasm/aline-admin"
+        registryCredential = 'docker-login'
+        tag = sh(returnStdout: true, script: "git rev-parse --short=10 HEAD").trim()
+    }
+    tools {
+        nodejs 'NodeScanner'
+    }
+
+    stages {
+        stage('sonar') {
+            steps {
+                script {
+                    sonar()
+                }
+            }
+        }
+        stage('quality gate') {
+            steps {
+                script {
+                    qualityGate()
+                }
+            }
+        }
+        stage('build app') {
+            when {
+                expression {
+                    BRANCH_NAME != 'main'
+                }
+            }
+            steps {
+                script {
+                    build()
+                }
+            }
+        }
+        stage('push image') {
+            when {
+                expression {
+                    BRANCH_NAME == 'main'
+                }
+            }
+            steps {
+                script {
+                    image()
+                }
+            }
+        }
+        stage('clean stage') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+}

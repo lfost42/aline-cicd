@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: admin
-        image: lyndasm/aline-admin
+        image: lyndasm/aline-admin:kubernetes
         ports:
           - containerPort: 3000
         resources:
