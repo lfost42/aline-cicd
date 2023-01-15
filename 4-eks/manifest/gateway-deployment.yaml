@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+  namespace: aline
+  labels:
+    aline.component: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      aline.component: gateway
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        aline.component: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: lyndasm/aline-gateway
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
+        env:
+        - name: APP_PORT
+          value: "8080"
+        - name: DB_USERNAME
+          value: user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-password
+              key: DB_PASSWORD
+        - name: DB_HOST
+          value: mysql
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: alinedb
+        - name: APP_SERVICE_HOST
+          value: server-cluster-ip
+        - name: PORTAL_LANDING
+          value: alinefinancial.com
+        - name: PORTAL_DASHBOARD
+          value: member.alinefinancial.com
+        - name: PORTAL_ADMIN
+          value: admin.alinefinancial.com
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+      restartPolicy: Always
