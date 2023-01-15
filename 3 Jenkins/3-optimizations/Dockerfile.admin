@@ -1,0 +1,4 @@
+FROM nginx:mainline-alpine-slim
+LABEL Name="aline-admin" version="1.6"
+COPY ["/build", "/usr/share/nginx/html"]
+EXPOSE 3000

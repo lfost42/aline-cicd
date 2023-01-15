@@ -1,0 +1,45 @@
+#!/usr/bin/env groovy
+@Library('lib-aline-maven')
+def gv
+
+pipeline {
+    agent any
+    environment {
+        registry = "lyndasm/aline-user-microservice"
+        registryCredential = 'docker-login'
+    }
+
+    stages {
+        stage('sonar') {
+            steps {
+                script {
+                    sonar()
+                }
+            }
+        }
+        stage('build app') {
+            steps {
+                script {
+                    build()
+                }
+            }
+        }
+        stage('image') {
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'main'
+            //     }
+            // }
+            steps {
+                script {
+                    image()
+                }
+            }
+        }
+        stage('clean stage') {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+}
