@@ -3,7 +3,13 @@ kind: Ingress
 metadata:
   name: nginx-ingress
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/actions.api: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/api-target-group/1234567890abcdefg"}'
+    alb.ingress.kubernetes.io/actions.landing: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/landing-target-group/1234567890abcdefg"}'
+    alb.ingress.kubernetes.io/actions.admin: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/admin-target-group/1234567890abcdefg"}'
+    alb.ingress.kubernetes.io/actions.member: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/member-target-group/1234567890abcdefg"}'
   namespace: aline
   labels:
     aline.component: aline-client-ingress
