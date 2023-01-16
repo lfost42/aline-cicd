@@ -10,11 +10,6 @@ spec:
   selector:
     matchLabels:
       aline.component: server
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -28,29 +23,9 @@ spec:
         env:
         - name: APP_PORT
           value: "8072"
-        - name: DB_USERNAME
-          value: user
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-password
-              key: DB_PASSWORD
-        - name: DB_HOST
-          value: mysql
-        - name: DB_PORT
-          value: "3306"
-        - name: DB_NAME
-          value: alinedb
-        - name: ENCRYPT_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: encrypt-key
-              key:  ENCRYPT_SECRET_KEY
-        - name: JWT_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: jwt-key
-              key:  JWT_SECRET_KEY
+        envFrom:
+        - secretRef:
+            name: aline-config
         resources:
           limits:
             cpu: "500m"

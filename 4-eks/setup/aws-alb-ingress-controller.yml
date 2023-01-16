@@ -60,3 +60,4 @@ metadata:
   name: alb-ingress-controller
   namespace: kube-system
 ...
+# https://www.eksworkshop.com/beginner/130_exposing-service/ingress/

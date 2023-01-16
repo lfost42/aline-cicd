@@ -6,4 +6,5 @@ auth:
 
 namespaceOverride: aline
 # helm repo add my-repo https://charts.bitnami.com/bitnami
-# helm install mysql my-repo/mysql --values mysql-bn.yamlOv
+# helm install mysql my-repo/mysql --values mysql-bn.yaml
+# helm upgrade mysql my-repo/mysql --set Password=really-good-password,rootPassword=really-good-password

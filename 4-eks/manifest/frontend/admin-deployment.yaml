@@ -10,11 +10,6 @@ spec:
   selector:
     matchLabels:
       aline.component: admin
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -28,9 +23,9 @@ spec:
         resources:
           limits:
             cpu: "500m"
-            memory: "1Gi"
+            memory: "256Mi"
           requests:
             cpu: "200m"
-            memory: "512Mi"
+            memory: "128Mi"
       restartPolicy: Always
 

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transaction-deployment
+  name: underwriter-deployment
   namespace: aline
   labels:
     aline.component: server
@@ -16,13 +16,13 @@ spec:
         aline.component: server
     spec:
       containers:
-      - name: transaction
-        image: lyndasm/aline-transaction-microservice
+      - name: underwriter
+        image: lyndasm/aline-underwriter-microservice
         ports:
-          - containerPort: 8073
+          - containerPort: 8071
         env:
         - name: APP_PORT
-          value: "8073"
+          value: "8071"
         envFrom:
         - secretRef:
             name: aline-config

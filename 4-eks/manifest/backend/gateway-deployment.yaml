@@ -10,11 +10,6 @@ spec:
   selector:
     matchLabels:
       aline.component: gateway
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -29,19 +24,9 @@ spec:
         env:
         - name: APP_PORT
           value: "8080"
-        - name: DB_USERNAME
-          value: user
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-password
-              key: DB_PASSWORD
-        - name: DB_HOST
-          value: mysql
-        - name: DB_PORT
-          value: "3306"
-        - name: DB_NAME
-          value: alinedb
+        envFrom:
+        - secretRef:
+            name: aline-config
         - name: APP_SERVICE_HOST
           value: server-cluster-ip
         - name: PORTAL_LANDING
