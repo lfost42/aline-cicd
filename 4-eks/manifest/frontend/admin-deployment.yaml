@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: admin
-        image: lyndasm/aline-admin:kubernetes
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-admin-portal
         ports:
           - containerPort: 3000
         resources:

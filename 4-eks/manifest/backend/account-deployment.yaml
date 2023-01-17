@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: bank
-        image: lyndasm/aline-account-microservice
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-account-microservice
         ports:
           - containerPort: 8072
         env:

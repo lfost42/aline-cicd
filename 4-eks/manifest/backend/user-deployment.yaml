@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: user
-        image: lyndasm/aline-user-microservice
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-user-microservice
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8070

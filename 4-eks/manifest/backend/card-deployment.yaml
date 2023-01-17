@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: card
-        image: lyndasm/aline-card-microservice
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-card-microservice
         ports:
           - containerPort: 8084
         env:
