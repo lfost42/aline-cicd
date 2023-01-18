@@ -23,6 +23,12 @@ spec:
         env:
         - name: APP_PORT
           value: "8084"
+        - name: DB_HOST
+          value: alinedb.cdz8rwvnckez.us-west-1.rds.amazonaws.com
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: lf_alinedb
         envFrom:
         - secretRef:
             name: aline-config

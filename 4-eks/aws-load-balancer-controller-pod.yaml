@@ -1,0 +1,203 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubernetes.io/psp: eks.privileged
+    prometheus.io/port: "8080"
+    prometheus.io/scrape: "true"
+  creationTimestamp: "2023-01-18T03:59:40Z"
+  generateName: aws-load-balancer-controller-857c9949b4-
+  labels:
+    app.kubernetes.io/instance: aws-load-balancer-controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+    pod-template-hash: 857c9949b4
+  name: aws-load-balancer-controller-857c9949b4-4ztpb
+  namespace: kube-system
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: aws-load-balancer-controller-857c9949b4
+    uid: b4d0f10f-ceab-433b-801a-2bdac9e09f96
+  resourceVersion: "125845"
+  uid: ef0f3df1-6709-4604-9788-e5ef47c5024b
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - aws-load-balancer-controller
+          topologyKey: kubernetes.io/hostname
+        weight: 100
+  containers:
+  - args:
+    - --cluster-name=lf-aline-cluster
+    - --ingress-class=alb
+    command:
+    - /controller
+    env:
+    - name: AWS_STS_REGIONAL_ENDPOINTS
+      value: regional
+    - name: AWS_DEFAULT_REGION
+      value: us-west-1
+    - name: AWS_REGION
+      value: us-west-1
+    - name: AWS_ROLE_ARN
+      value: arn:aws:iam::052911266688:role/eksctl-lf-aline-cluster-addon-iamserviceacco-Role1-J6UDRQ6IOCR8
+    - name: AWS_WEB_IDENTITY_TOKEN_FILE
+      value: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+    image: public.ecr.aws/eks/aws-load-balancer-controller:v2.4.6
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 2
+      httpGet:
+        path: /healthz
+        port: 61779
+        scheme: HTTP
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 10
+    name: aws-load-balancer-controller
+    ports:
+    - containerPort: 9443
+      name: webhook-server
+      protocol: TCP
+    - containerPort: 8080
+      name: metrics-server
+      protocol: TCP
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /tmp/k8s-webhook-server/serving-certs
+      name: cert
+      readOnly: true
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-tgtkg
+      readOnly: true
+    - mountPath: /var/run/secrets/eks.amazonaws.com/serviceaccount
+      name: aws-iam-token
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: ip-192-168-102-165.us-west-1.compute.internal
+  preemptionPolicy: PreemptLowerPriority
+  priority: 2000000000
+  priorityClassName: system-cluster-critical
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 65534
+  serviceAccount: aws-load-balancer-controller
+  serviceAccountName: aws-load-balancer-controller
+  terminationGracePeriodSeconds: 10
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: aws-iam-token
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          audience: sts.amazonaws.com
+          expirationSeconds: 86400
+          path: token
+  - name: cert
+    secret:
+      defaultMode: 420
+      secretName: aws-load-balancer-tls
+  - name: kube-api-access-tgtkg
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-01-18T03:59:40Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-01-18T03:59:43Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-01-18T03:59:43Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-01-18T03:59:40Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://9df0d4d88fe26358b2ed3da0831c471bf0870f37d9608515780b33509b332c8c
+    image: public.ecr.aws/eks/aws-load-balancer-controller:v2.4.6
+    imageID: public.ecr.aws/eks/aws-load-balancer-controller@sha256:b2460dd8db8962455857e8e90ddbaa8b96bc567bcb3e815342c91e0dd921ece1
+    lastState: {}
+    name: aws-load-balancer-controller
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-01-18T03:59:42Z"
+  hostIP: 192.168.102.165
+  phase: Running
+  podIP: 192.168.106.154
+  podIPs:
+  - ip: 192.168.106.154
+  qosClass: BestEffort
+  startTime: "2023-01-18T03:59:40Z"
+# # AWS LB Controller - Create ClusterRole, ClusterRoleBinding & ServiceAccount
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/master/docs/examples/rbac-role.yaml
+# aws iam create-policy \
+#     --policy-name AWSLoadBalancerControllerIAMPolicy \
+#     --policy-document file://iam_policy_latest.json
+# arn:aws:iam::052911266688:policy/AWSLoadBalancerControllerIAMPolicy
+# arn:aws:iam::052911266688:policy/AWSLoadBalancerControllerIAMPolicy
+# eksctl create iamserviceaccount \
+#   --cluster=lf-aline-cluster \
+#   --namespace=kube-system \
+#   --name=aws-load-balancer-controller \
+#   --attach-policy-arn=arn:aws:iam::052911266688:policy/AWSLoadBalancerControllerIAMPolicy \
+#   --override-existing-serviceaccounts \
+#   --region us-west-1 \
+#   --approve
+# eksctl delete iamserviceaccount aws-load-balancer-controller --namespace kube-system --cluster lf-aline-cluster
+# allow incoming traffic on TCP 9443 from k8s control plan for webhook access
+
+# kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+# helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=lf-aline-cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+
+# helm uninstall aws-load-balancer-controller -n kube-system
