@@ -6,9 +6,12 @@ metadata:
 # kubectl config set-context --current --namespace=aline
 
 # kubectl create secret generic aline-config --from-env-file notes/.env
-# kubectl apply -f mysql-service.yaml
-# kubectl apply -f manifest/backend/cluster-ip.yaml
+# kubectl apply -f mysql-en.yaml
+# set up aws secret (update.yaml)
+
+# kubectl apply -f manifest/backend/server-nlb.yaml
 # kubectl apply -f manifest/backend/user-deployment.yaml
+# kubectl apply -f manifest/frontend/
 
 # kubectl run -it --rm --image=mysql:8.0.28 --restart=Never mysql-client -- mysql -h alinedb.ckgn8hh1chiz.us-west-1.rds.amazonaws.com -u admin -preally_good_password
 # mysql> create database lf_alinedb;
@@ -25,9 +28,11 @@ metadata:
 # mysql> exit;
 
 # kubectl apply -f manifest/frontend/
-# kubectl apply -f manifest/backend/
-
 
 # kubectl delete secret aline-config
 # kubectl delete -f mysql-service.yaml
+# kubectl apply -f manifest/backend/
+
 # kubectl delete -f manifest/backend/user-deployment.yaml
+# kubectl delete -f manifest/frontend/
+# kubectl delete -f aline-ingress.yaml

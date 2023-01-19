@@ -1,20 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: aline-aws-ingress
+  name: aline-client-ingress
   annotations:
-    ingressclass.kubernetes.io/is-default-class: "true"
-    alb.ingress.kubernetes.io/scheme: "internet-facing"
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/actions.api: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/api-target-group/1234567890abcdefg"}'
-    alb.ingress.kubernetes.io/actions.landing: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/landing-target-group/1234567890abcdefg"}'
-    alb.ingress.kubernetes.io/actions.admin: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/admin-target-group/1234567890abcdefg"}'
-    alb.ingress.kubernetes.io/actions.member: '{"Type": "forward", "TargetGroupArn": "arn:aws:elasticloadbalancing:us-west-2:1234567890:targetgroup/member-target-group/1234567890abcdefg"}'
+    kubernetes.io/ingress.class: alb 
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip 
   namespace: aline
   labels:
     aline.component: aline-client-ingress
 spec:
-  controller: ingress.k8s.aws/alb
   # tls:
   # - hosts:
   #   - alinefinancial.com
@@ -39,14 +34,14 @@ spec:
               service:
                 name: landing-service
                 port:
-                  number: 4200
+                  number: 80
           - path: /login
             pathType: Prefix
             backend:
               service:
-                name: landing-service
+                name: member-service
                 port:
-                  number: 4200
+                  number: 80
     - host: admin.alinefinancial.com
       http:
         paths:
@@ -56,14 +51,7 @@ spec:
               service:
                 name: admin-service
                 port:
-                  number: 3000
-          - path: /login
-            pathType: Prefix
-            backend:
-              service:
-                name: admin-service
-                port:
-                  number: 3000
+                  number: 80
     - host: member.alinefinancial.com
       http:
         paths:
@@ -73,11 +61,4 @@ spec:
               service:
                 name: member-service
                 port:
-                  number: 3007
-          - path: /login
-            pathType: Prefix
-            backend:
-              service:
-                name: member-service
-                port:
-                  number: 3007
+                  number: 80

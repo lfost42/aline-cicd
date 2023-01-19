@@ -15,6 +15,8 @@ spec:
       labels:
         aline.component: gateway
     spec:
+      imagePullSecrets:
+        - name: aws-registry-key
       containers:
       - name: gateway
         image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-gateway

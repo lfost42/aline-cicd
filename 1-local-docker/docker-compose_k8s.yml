@@ -9,9 +9,12 @@ x-variables: &variables
   APP_SERVICE_HOST: ${APP_SERVICE_HOST}
 
 x-react-variables: &react-variables
-  REACT_APP_MEMBER_DASHBOARD_URL: ${REACT_APP_MEMBER_DASHBOARD_URL}
-  REACT_APP_API_BASEURL: http://localhost:${GATEWAY_PORT}
-  REACT_APP_API: http://localhost:${GATEWAY_PORT}/api
+  REACT_APP_MEMBER_DASHBOARD_URL: landing.alinefinanncial.com
+  REACT_APP_API_BASEURL: api.alinefinancial.com
+  REACT_APP_API: api.alinefinancial.com/api
+
+volumes:
+  db-data:
 
 services:
   # Database
@@ -120,5 +123,3 @@ services:
       <<: *variables
       APP_PORT: ${USER_PORT}
 
-volumes:
-  db-data:

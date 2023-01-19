@@ -10,9 +10,9 @@ WORKDIR /node_app
 COPY ["package*.json", "/node_app"]
 
 # Add environment variables to image
-ENV REACT_APP_MEMBER_DASHBOARD_URL=${REACT_APP_MEMBER_DASHBOARD_URL}
-ENV REACT_APP_API_BASEURL=${REACT_APP_API_BASEURL}
-ENV REACT_APP_API=${REACT_APP_API_BASEURL}
+ENV REACT_APP_MEMBER_DASHBOARD_URL: landing.alinefinanncial.com
+ENV REACT_APP_API_BASEURL: api.alinefinancial.com
+ENV REACT_APP_API: api.alinefinancial.com/api
 
 # Installs npm, python3, and dependencies
 RUN ["npm", "install", "-g", "npm@7.24.0"]
