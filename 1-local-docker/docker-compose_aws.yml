@@ -1,0 +1,125 @@
+version: "3.8"
+
+x-variables: &variables
+  DB_USERNAME: admin
+  DB_PASSWORD: really_good_password
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_NAME: lf_alinedb
+  APP_SERVICE_HOST: localhost
+
+x-react-variables: &react-variables
+  REACT_APP_MEMBER_DASHBOARD_URL: landing.alinefinanncial.com
+  REACT_APP_API_BASEURL: api.alinefinancial.com
+  REACT_APP_API: api.alinefinancial.com
+
+volumes:
+  db-data:
+
+services:
+  # Database
+  mysql:
+    image: lyndasm/aline-mysql
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  # Frontend Projects
+  member:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-member-dashboard
+    ports:
+      - 3306:80
+    environment:
+      <<: *react-variables
+
+  admin:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-admin-portal
+    ports:
+      - 3000:80
+    environment:
+      <<: *react-variables
+
+  landing:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-landing-portal
+    ports:
+      - 4200:80
+    environment:
+      <<: *react-variables
+      
+
+  # Maven Projects
+  gateway:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-gateway
+    ports:
+      - 8080:8080
+    environment:
+      <<: *variables
+      APP_PORT: 8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  account:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-account-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8072:8072
+    environment:
+      <<: *variables
+      APP_PORT: 8072
+
+  bank:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-bank-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8083:8083
+    environment:
+      <<: *variables
+      APP_PORT: 8083
+
+  card:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-card-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8084:8084
+    environment:
+      <<: *variables
+      APP_PORT: 8084
+
+  transaction:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-transaction-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8073:8073
+    environment:
+      <<: *variables
+      APP_PORT: 8073
+
+  underwriter:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-underwriter-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8071:8071
+    environment:
+      <<: *variables
+      APP_PORT: 8071
+
+  user:
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-user-microservice
+    depends_on:
+      - mysql
+    ports:
+      - 8071:8071
+    environment:
+      <<: *variables
+      APP_PORT: 8071
+

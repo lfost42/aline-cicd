@@ -29,27 +29,14 @@ spec:
         env:
         - name: APP_PORT
           value: "8080"
-        - name: DB_USERNAME
-          value: user
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-password
-              key: DB_PASSWORD
-        - name: DB_HOST
-          value: mysql
-        - name: DB_PORT
-          value: "3306"
-        - name: DB_NAME
-          value: alinedb
         - name: APP_SERVICE_HOST
           value: server-cluster-ip
         - name: PORTAL_LANDING
-          value: alinefinancial.com
+          value: landing-service
         - name: PORTAL_DASHBOARD
-          value: member.alinefinancial.com
+          value: member-service
         - name: PORTAL_ADMIN
-          value: admin.alinefinancial.com
+          value: admin-service
         resources:
           limits:
             cpu: "500m"
