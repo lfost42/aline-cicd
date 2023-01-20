@@ -29,7 +29,7 @@ services:
   member:
     image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-member-dashboard
     ports:
-      - 3306:80
+      - 3007:80
     environment:
       <<: *react-variables
 
@@ -57,7 +57,7 @@ services:
       <<: *variables
       APP_PORT: 8080
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${GATEWAY_PORT}/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -108,10 +108,10 @@ services:
     depends_on:
       - mysql
     ports:
-      - 8071:8071
+      - 8070:8070
     environment:
       <<: *variables
-      APP_PORT: 8071
+      APP_PORT: 8070
 
   user:
     image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-user-microservice
