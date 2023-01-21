@@ -7,6 +7,15 @@ metadata:
     aline.component: server
     tier: backend
 spec:
+  affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: subnet
+                operator: In
+                values:
+                - private
   replicas: 1
   selector:
     matchLabels:
@@ -36,6 +45,6 @@ spec:
             cpu: "500m"
             memory: "1Gi"
           requests:
-            cpu: "200m"
+            cpu: "300m"
             memory: "512Mi"
       restartPolicy: Always

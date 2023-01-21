@@ -15,6 +15,15 @@ spec:
       labels:
         aline.component: gateway
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: subnet
+                operator: In
+                values:
+                - private
       imagePullSecrets:
         - name: aws-registry-key
       containers:
@@ -37,8 +46,8 @@ spec:
         resources:
           limits:
             cpu: "500m"
-            memory: "500Mi"
+            memory: "1Gi"
           requests:
-            cpu: "200m"
-            memory: "256Mi"
+            cpu: "300m"
+            memory: "512Mi"
       restartPolicy: Always

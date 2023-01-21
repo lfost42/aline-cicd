@@ -15,6 +15,15 @@ spec:
       labels:
         aline.component: member
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: subnet
+                operator: In
+                values:
+                - public
       imagePullSecrets:
         - name: aws-registry-key
       containers:
@@ -24,9 +33,9 @@ spec:
           - containerPort: 80
         resources:
           limits:
-            cpu: "500m"
+            cpu: "300m"
             memory: "256Mi"
           requests:
-            cpu: "200m"
+            cpu: "150m"
             memory: "128Mi"
       restartPolicy: Always

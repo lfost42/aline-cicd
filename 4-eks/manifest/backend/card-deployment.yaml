@@ -15,22 +15,25 @@ spec:
       labels:
         aline.component: server
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: subnet
+                operator: In
+                values:
+                - private
       imagePullSecrets:
         - name: aws-registry-key
       containers:
       - name: card
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-card-microservice
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-card-microservice
         ports:
           - containerPort: 8084
         env:
         - name: APP_PORT
           value: "8084"
-        - name: DB_HOST
-          value: alinedb.cdz8rwvnckez.us-west-1.rds.amazonaws.com
-        - name: DB_PORT
-          value: "3306"
-        - name: DB_NAME
-          value: lf_alinedb
         envFrom:
         - secretRef:
             name: aline-config
@@ -39,6 +42,6 @@ spec:
             cpu: "500m"
             memory: "1Gi"
           requests:
-            cpu: "200m"
+            cpu: "300m"
             memory: "512Mi"
       restartPolicy: Always
