@@ -5,13 +5,10 @@ metadata:
   namespace: aline
   labels:
     aline.component: gateway
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: nlb
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - name: gateway
-      port: 8080
-      targetPort: 8080
+      port: 80
   selector:
     aline.component: gateway

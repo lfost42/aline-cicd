@@ -19,24 +19,21 @@ spec:
         - name: aws-registry-key
       containers:
       - name: gateway
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-gateway
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-gateway
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 8080
+          - containerPort: 80
         env:
         - name: APP_PORT
-          value: "8080"
-        envFrom:
-        - secretRef:
-            name: aline-config
+          value: "80"
         - name: APP_SERVICE_HOST
-          value: server-cluster-ip
+          value: server-nlb
         - name: PORTAL_LANDING
-          value: alinefinancial.com
+          value: landing-service
         - name: PORTAL_DASHBOARD
-          value: member.alinefinancial.com
+          value: member-service
         - name: PORTAL_ADMIN
-          value: admin.alinefinancial.com
+          value: admin-service
         resources:
           limits:
             cpu: "500m"

@@ -3,7 +3,6 @@
 # aws iam create-policy \
 #     --policy-name AWSLoadBalancerControllerIAMPolicy \
 #     --policy-document file://iam_policy_latest.json
-# arn:aws:iam::052911266688:policy/AWSLoadBalancerControllerIAMPolicy
 
 # eksctl create iamserviceaccount \
 #   --cluster=lf-aline \
@@ -14,12 +13,33 @@
 #   --region us-west-1 \
 #   --approve
 
-eksctl delete iamserviceaccount aws-load-balancer-controller --namespace kube-system --cluster lf-aline
-# allow incoming traffic on TCP 9443 from k8s control plan for webhook access
+# allow incoming traffic on TCP 443 on k8s control plane for webhook access
 
-kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=lf-aline-cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+# kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+# helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=lf-aline --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+    --set clusterName=lf-aline \
+    --set serviceAccount.create=false \
+    --set region=us-west-1 \
+    --set vpcId=vpc-01fac557e86febc0e \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    -n kube-system
+
+kubectl apply -f manifest/frontend/
+
 # helm uninstall aws-load-balancer-controller -n kube-system
+
+node_security_group_additional_rules = {
+    ingress_allow_access_from_control_plane = {
+      type                          = "ingress"
+      protocol                      = "tcp"
+      from_port                     = 9443
+      to_port                       = 9443
+      source_cluster_security_group = true
+      description                   = "Allow access from control plane to webhook port of AWS load balancer controller"
+    }
+  }
 
 # verify domains are mapping:
 curl -i -H "Host: admin.alinefinancial.com" http://a2de8ecf5edac43a284d9636c22c945e-1261427252.us-west-1.elb.amazonaws.com
@@ -27,12 +47,15 @@ curl -i -H "Host: alinefinancial.com" http://a5f23b5a274af4219aa5e02c7f850d90-17
 curl -i -H "Host: api.alinefinancial.com" http://a5f23b5a274af4219aa5e02c7f850d90-1766176637.us-west-1.elb.amazonaws.com
 curl -i -H "Host: member.alinefinancial.com" http://a40c7f8b237c44e94b8fac42f2525063-1040091005.us-west-1.elb.amazonaws.com
 
-# since we don't own the domains, route them locally to /etc/hosts - https://www.nslookup.io/
-# 54.183.75.4 admin.alinefinancial.com
-# 54.183.9.66 admin.alinefinancial.com
-# 54.183.43.136 alinefinancial.com
-# 54.183.85.125 alinefinancial.com
-# 54.183.43.136 api.alinefinancial.com
-# 54.183.85.125 api.alinefinancial.com
-# 54.183.50.184 member.alinefinancial.com
-# 54.183.71.183 member.alinefinancial.com
+
+https://www.nslookup.io/domains/adb44aae7f3004a87b8b323f39e557e1-944149971.us-west-1.elb.amazonaws.com/dns-records/
+https://www.nslookup.io/domains/ad86ff82a4faf4c8d8777c2bbc4b91ae-398505821.us-west-1.elb.amazonaws.com/dns-records/
+https://www.nslookup.io/aa06dbed398be47e288853aea800f7bb-1073899846.us-west-1.elb.amazonaws.com/dns-records/
+52.9.61.138 admin.alinefinancial.com
+52.9.61.138 admin.alinefinancial.com
+13.56.94.208 alinefinancial.com
+52.9.183.187 alinefinancial.com
+13.56.94.208 api.alinefinancial.com
+52.9.183.187 api.alinefinancial.com
+54.151.20.82 member.alinefinancial.com
+50.18.198.47 member.alinefinancial.com

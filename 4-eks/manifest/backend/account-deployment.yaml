@@ -5,21 +5,24 @@ metadata:
   namespace: aline
   labels:
     aline.component: server
+    tier: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
       aline.component: server
+      tier: backend
   template:
     metadata:
       labels:
         aline.component: server
+        tier: backend
     spec:
       imagePullSecrets:
         - name: aws-registry-key
       containers:
       - name: bank
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-account-microservice
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-account-microservice
         ports:
           - containerPort: 8072
         env:

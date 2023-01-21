@@ -10,7 +10,4 @@ spec:
   selector:
     aline.component: landing
   ports:
-    - protocol: TCP
-      name: landing
-      port: 80
-      targetPort: 80
+    - port: 80

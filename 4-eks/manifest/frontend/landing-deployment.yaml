@@ -19,7 +19,7 @@ spec:
         - name: aws-registry-key
       containers:
       - name: landing
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-landing-portal
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-landing-portal
         ports:
           - containerPort: 80
         resources:

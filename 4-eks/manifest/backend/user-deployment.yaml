@@ -17,28 +17,16 @@ spec:
     spec:
       containers:
       - name: user
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-user-microservice
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-user-microservice
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8070
         env:
         - name: APP_PORT
           value: "8070"
-        - name: DB_USERNAME
-          value: admin
-        - name: DB_PASSWORD
-          value: really_good_password
-        - name: DB_HOST
-          value: mysql
-        - name: DB_NAME
-          value: lf_alinedb
-        - name: ENCRYPT_SECRET_KEY
-          value: 001104a5cbe95ed3bff1495a1ae92a28
-        - name: JWT_SECRET_KEY
-          value: my-32-character-ultra-secure-and-ultra-long-secret
-        # envFrom:
-        # - secretRef:
-        #     name: aline-config
+        envFrom:
+        - secretRef:
+            name: aline-config
         resources:
           limits:
             cpu: "500m"

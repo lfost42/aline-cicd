@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql
+  namespace: aline
 spec:
   type: ExternalName
-  externalName: alinedb.cdz8rwvnckez.us-west-1.rds.amazonaws.com
+  externalName: alinedb.ckgn8hh1chiz.us-west-1.rds.amazonaws.com
