@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: card-deployment
+  name: transaction-deployment
   namespace: aline
   labels:
     aline.component: server
@@ -27,13 +27,13 @@ spec:
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-      - name: card
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-card-microservice
+      - name: transaction
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-transaction-microservice
         ports:
-          - containerPort: 8084
+          - containerPort: 8073
         env:
         - name: APP_PORT
-          value: "8084"
+          value: "8073"
         envFrom:
         - secretRef:
             name: aline-config
@@ -42,6 +42,6 @@ spec:
             cpu: "500m"
             memory: "1Gi"
           requests:
-            cpu: "300m"
+            cpu: "440m"
             memory: "512Mi"
       restartPolicy: Always

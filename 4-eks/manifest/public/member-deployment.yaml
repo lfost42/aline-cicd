@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transaction-deployment
+  name: member-deployment
   namespace: aline
   labels:
-    aline.component: server
+    aline.component: member
+    tier: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: server
+      aline.component: member
+      tier: frontend
   template:
     metadata:
       labels:
-        aline.component: server
+        aline.component: member
+        tier: frontend
     spec:
       affinity:
         nodeAffinity:
@@ -23,25 +26,19 @@ spec:
               - key: subnet
                 operator: In
                 values:
-                - private
+                - public
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-      - name: transaction
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-transaction-microservice
+      - name: member
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-member-dashboard
         ports:
-          - containerPort: 8073
-        env:
-        - name: APP_PORT
-          value: "8073"
-        envFrom:
-        - secretRef:
-            name: aline-config
+          - containerPort: 80
         resources:
           limits:
-            cpu: "500m"
-            memory: "1Gi"
-          requests:
             cpu: "300m"
-            memory: "512Mi"
+            memory: "256Mi"
+          requests:
+            cpu: "150m"
+            memory: "128Mi"
       restartPolicy: Always

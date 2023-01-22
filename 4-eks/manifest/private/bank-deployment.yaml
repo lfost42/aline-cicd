@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-deployment
+  name: bank-deployment
   namespace: aline
   labels:
     aline.component: server
@@ -24,15 +24,16 @@ spec:
                 operator: In
                 values:
                 - private
+      imagePullSecrets:
+        - name: aws-registry-key
       containers:
-      - name: user
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-user-microservice
-        imagePullPolicy: IfNotPresent
+      - name: bank
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-bank-microservice
         ports:
-          - containerPort: 8070
+          - containerPort: 8083
         env:
         - name: APP_PORT
-          value: "8070"
+          value: "8083"
         envFrom:
         - secretRef:
             name: aline-config
@@ -41,6 +42,6 @@ spec:
             cpu: "500m"
             memory: "1Gi"
           requests:
-            cpu: "300m"
+            cpu: "440m"
             memory: "512Mi"
       restartPolicy: Always

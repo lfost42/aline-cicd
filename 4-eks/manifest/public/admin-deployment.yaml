@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: member-deployment
+  name: admin-deployment
   namespace: aline
   labels:
-    aline.component: member
+    aline.component: admin
+    tier: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: member
+      aline.component: admin
+      tier: frontend
   template:
     metadata:
       labels:
-        aline.component: member
+        aline.component: admin
+        tier: frontend
     spec:
       affinity:
         nodeAffinity:
@@ -27,10 +30,10 @@ spec:
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-      - name: member
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-member-dashboard
+      - name: admin
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-admin-portal
         ports:
-          - containerPort: 80
+          - containerPort: 3000
         resources:
           limits:
             cpu: "300m"
@@ -39,3 +42,4 @@ spec:
             cpu: "150m"
             memory: "128Mi"
       restartPolicy: Always
+

@@ -5,15 +5,18 @@ metadata:
   namespace: aline
   labels:
     aline.component: landing
+    tier: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
       aline.component: landing
+      tier: frontend
   template:
     metadata:
       labels:
         aline.component: landing
+        tier: frontend
     spec:
       affinity:
         nodeAffinity:

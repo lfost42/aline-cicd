@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway-deployment
+  name: account-deployment
   namespace: aline
   labels:
-    aline.component: gateway
+    aline.component: server
+    tier: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: gateway
+      aline.component: server
+      tier: backend
   template:
     metadata:
       labels:
-        aline.component: gateway
+        aline.component: server
+        tier: backend
     spec:
       affinity:
         nodeAffinity:
@@ -27,27 +30,21 @@ spec:
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-      - name: gateway
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-gateway
-        imagePullPolicy: IfNotPresent
+      - name: bank
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-account-microservice
         ports:
-          - containerPort: 80
+          - containerPort: 8072
         env:
         - name: APP_PORT
-          value: "80"
-        - name: APP_SERVICE_HOST
-          value: server-nlb
-        - name: PORTAL_LANDING
-          value: landing-service
-        - name: PORTAL_DASHBOARD
-          value: member-service
-        - name: PORTAL_ADMIN
-          value: admin-service
+          value: "8072"
+        envFrom:
+        - secretRef:
+            name: aline-config
         resources:
           limits:
             cpu: "500m"
             memory: "1Gi"
           requests:
-            cpu: "300m"
+            cpu: "440m"
             memory: "512Mi"
       restartPolicy: Always

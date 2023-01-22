@@ -1,13 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-deployment
+  name: card-deployment
   namespace: aline
   labels:
     aline.component: server
-    tier: backend
 spec:
-  affinity:
+  replicas: 1
+  selector:
+    matchLabels:
+      aline.component: server
+  template:
+    metadata:
+      labels:
+        aline.component: server
+    spec:
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -16,27 +24,16 @@ spec:
                 operator: In
                 values:
                 - private
-  replicas: 1
-  selector:
-    matchLabels:
-      aline.component: server
-      tier: backend
-  template:
-    metadata:
-      labels:
-        aline.component: server
-        tier: backend
-    spec:
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-      - name: bank
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-account-microservice
+      - name: card
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-card-microservice
         ports:
-          - containerPort: 8072
+          - containerPort: 8084
         env:
         - name: APP_PORT
-          value: "8072"
+          value: "8084"
         envFrom:
         - secretRef:
             name: aline-config
@@ -45,6 +42,6 @@ spec:
             cpu: "500m"
             memory: "1Gi"
           requests:
-            cpu: "300m"
+            cpu: "440m"
             memory: "512Mi"
       restartPolicy: Always

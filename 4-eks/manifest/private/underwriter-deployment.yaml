@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: admin-deployment
+  name: underwriter-deployment
   namespace: aline
   labels:
-    aline.component: admin
+    aline.component: server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      aline.component: admin
+      aline.component: server
   template:
     metadata:
       labels:
-        aline.component: admin
+        aline.component: server
     spec:
       affinity:
         nodeAffinity:
@@ -23,20 +23,24 @@ spec:
               - key: subnet
                 operator: In
                 values:
-                - public
+                - private
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-      - name: admin
-        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-admin-portal
+      - name: underwriter
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-underwriter-microservice
         ports:
-          - containerPort: 3000
+          - containerPort: 8071
+        env:
+        - name: APP_PORT
+          value: "8071"
+        envFrom:
+        - secretRef:
+            name: aline-config
         resources:
           limits:
-            cpu: "300m"
-            memory: "256Mi"
+            cpu: "500m"
+            memory: "1Gi"
           requests:
-            cpu: "150m"
-            memory: "128Mi"
+            cpu: "440m"
       restartPolicy: Always
-
