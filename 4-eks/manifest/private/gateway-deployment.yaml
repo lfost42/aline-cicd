@@ -23,7 +23,7 @@ spec:
               - key: subnet
                 operator: In
                 values:
-                - public
+                - private
       imagePullSecrets:
         - name: aws-registry-key
       containers:
@@ -45,9 +45,9 @@ spec:
           value: admin-service
         resources:
           limits:
-            cpu: "500m"
+            cpu: "700m"
             memory: "1Gi"
           requests:
-            cpu: "440m"
+            cpu: "500m"
             memory: "512Mi"
       restartPolicy: Always

@@ -39,8 +39,8 @@ spec:
             name: aline-config
         resources:
           limits:
-            cpu: "500m"
+            cpu: "700m"
             memory: "1Gi"
           requests:
-            cpu: "440m"
+            cpu: "500m"
       restartPolicy: Always

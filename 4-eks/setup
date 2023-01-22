@@ -1,37 +1,16 @@
 eksctl create cluster -f notes/cluster-config.yaml
-
-# `eks_rds_db_sg` access to 3306
-# RDS, create a subnet group `eks-rds_db_subnetgroup` with access to VPCs' private subnet groups
-# security group LF-ec2-rds-node (no rules)
-# on LF-rds-ec2-access, verify 3306 is open to LF-ec2-rds-node (sg-0693306e82fc13b85)
-attach LF-ec2-rds-node to EC2 (private nodegroup) and RDS
-
-verify rds-ec2-access is attached to private nodegroup instances
+attach LF-ec2-node to EC2 (private only)
+attach CC-rds-access is attached to RDS
 
 kubectl create namespace aline
 kubectl config set-context --current --namespace=aline
 kubectl create secret generic aline-config --from-env-file notes/.env
 kubectl-aws-registry-secret
 
-eksctl utils associate-iam-oidc-provider \
---region us-west-1 \
---cluster lf-aline \
---approve
-
-kubectl run -it --rm --image=mysql:8.0.28 --restart=Never mysql-client -- mysql -h alinedb.ckgn8hh1chiz.us-west-1.rds.amazonaws.com -u admin -preally_good_password
-mysql> create database lf_alinedb;
-mysql> show schemas;
-mysql> exit;
-
-kubectl apply -f manifest/services/
-
-
-# AWS LB Controller - Create ClusterRole, ClusterRoleBinding & ServiceAccount
-# kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/master/docs/examples/rbac-role.yaml
-# curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.4/docs/install/iam_policy.json
-# # aws iam create-policy \
-# #     --policy-name AWSLoadBalancerControllerIAMPolicy \
-# #     --policy-document file://iam_policy_latest.json
+# kubectl run -it --rm --image=mysql:8.0.28 --restart=Never mysql-client -- mysql -h alinedb.ckgn8hh1chiz.us-west-1.rds.amazonaws.com -u admin -p
+# mysql> create database lf_alinedb;
+# mysql> show schemas;
+# mysql> exit;
 
 # eksctl create iamserviceaccount \
 #   --cluster=lf-aline \
@@ -42,45 +21,41 @@ kubectl apply -f manifest/services/
 #   --region us-west-1 \
 #   --approve
 
-# allow incoming traffic on TCP 443 on k8s control plane for webhook access
-
+# helm uninstall aws-load-balancer-controller aws-load-balancer-controller -n kube-system
 # kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
 # helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=lf-aline --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
-# helm uninstall aws-load-balancer-controller aws-load-balancer-controller -n kube-system
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
     --set clusterName=lf-aline \
     --set serviceAccount.create=false \
     --set region=us-west-1 \
-    --set vpcId=vpc-01fac557e86febc0e \
+    --set vpcId=vpc-030aa17a9a7767e6a \
     --set serviceAccount.name=aws-load-balancer-controller \
     -n kube-system
-# kubectl get serviceaccount aws-load-balancer-controller --namespace kube-system
 # https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
 
-kubectl apply -f manifest/frontend/
-kubectl apply -f manifest/backend/
+kubectl apply -f manifest/private/
+kubectl apply -f manifest/public/
+kubectl apply -f manifest/services/
 
-kubectl apply -f manifest/backend/user-deployment.yaml
-kubectl delete -f manifest/backend/user-deployment.yaml
 # verify domains are mapping:
-curl -i -H "Host: admin.alinefinancial.com" a7ccb13f59d004e25bb865659e987b63-1863554673.us-west-1.elb.amazonaws.com
-curl -i -H "Host: alinefinancial.com" afd2365c8a8304374856ca59e9786c00-1006285737.us-west-1.elb.amazonaws.com 
-curl -i -H "Host: member.alinefinancial.com" af7be47ea2e8c42ab8839bb3c7c4319a-1708697462.us-west-1.elb.amazonaws.com
+curl -i -H "Host: admin.alinefinancial.com" af9dbe184bdaa4a45884c329a50d4165-1968148564.us-west-1.elb.amazonaws.com
+curl -i -H "Host: alinefinancial.com" a39f6549882984615b6e9a21bb310f4c-98814375.us-west-1.elb.amazonaws.com
+curl -i -H "Host: member.alinefinancial.com" a4714922a20a9480aa7a493b1a15b34b-36215794.us-west-1.elb.amazonaws.com
 
 https://www.nslookup.io
-52.52.241.106 admin.alinefinancial.com
-52.9.251.234 admin.alinefinancial.com
-52.8.159.175 alinefinancial.com
-13.57.65.195 alinefinancial.com
-52.8.168.80 member.alinefinancial.com
-52.52.28.233 member.alinefinancial.com
-52.8.19.163 api.alinefinancial.com
-52.53.88.189 api.alinefinancial.com
+52.8.36.147 admin.alinefinancial.com
+52.52.237.140 admin.alinefinancial.com
+52.52.91.234 alinefinancial.com
+52.8.56.198 alinefinancial.com
+50.18.54.120 member.alinefinancial.com
+52.9.111.1 member.alinefinancial.com
+52.9.119.170 api.alinefinancial.com
+52.52.198.54 api.alinefinancial.com
 
-a3e8da9c3cdc14664a4c06642d118abe-137450167.us-west-1.elb.amazonaws.com
+a94df1a8254fc49b2be737aa78238b26-769872164.us-west-1.elb.amazonaws.com
 
 kubectl delete all --all
 stop database
-detach LF-rds-ec2-access from RDS
+
 eksctl delete cluster -f notes/cluster-config.yaml
