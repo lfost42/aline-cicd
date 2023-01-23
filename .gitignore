@@ -1,4 +1,5 @@
 **.DS_Store
+**db-data/
 login.py
 **venv/
 **aline-kconfig.yaml
