@@ -20,7 +20,7 @@ x-react-variables: &react-variables
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_PASSWORD: ${DB_PASSWORD}
@@ -28,7 +28,7 @@ services:
       MYSQL_DATABASE: alinedb
     ports:
       - 3306:3306
-    restart: on-failure
+    restart: always
 
   gateway:
     image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-gateway
@@ -49,18 +49,41 @@ services:
         condition: service_healthy
     deploy:
       replicas: 2
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
       - 8071:8071
     environment:
       <<: *variables
       APP_PORT: 8071
     restart: on-failure
+    # http://aline-network-lb-eca0a43175222cc6.elb.us-west-1.amazonaws.com:8071/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+    # "username": "samantha_carter",
+    # "password": "LtColone1!",
+    # "role": "admin",
+    # "firstName": "Samantha",
+    # "lastName": "Carter",
+    # "email": "samantha.carter@sg1.com",
+    # "phone": "555-555-5555"
 
   account:
     image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-account-microservice
     depends_on:
       mysql:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
       - 8072:8072
     environment:
@@ -73,6 +96,14 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
       - 8083:8083
     environment:
@@ -85,6 +116,14 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
       - 8084:8084
     environment:
@@ -94,6 +133,14 @@ services:
 
   transaction:
     image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-transaction-microservice
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     depends_on:
       mysql:
         condition: service_healthy
@@ -106,6 +153,14 @@ services:
 
   underwriter:
     image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-underwriter-microservice
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     depends_on:
       mysql:
         condition: service_healthy
