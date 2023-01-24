@@ -60,55 +60,55 @@ services:
       PORTAL_DASHBOARD: ${APP_SERVICE_HOST}:${MEMBER_PORT}
       PORTAL_ADMIN: ${APP_SERVICE_HOST}:${ADMIN_PORT}
 
-  # account:
-  #   image: lyndasm/aline-account-microservice
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - ${ACCOUNT_PORT}:${ACCOUNT_PORT}
-  #   environment:
-  #     <<: *variables
-  #     APP_PORT: ${ACCOUNT_PORT}
+  account:
+    image: lyndasm/aline-account-microservice
+    depends_on:
+      - mysql
+    ports:
+      - ${ACCOUNT_PORT}:${ACCOUNT_PORT}
+    environment:
+      <<: *variables
+      APP_PORT: ${ACCOUNT_PORT}
 
-  # bank:
-  #   image: lyndasm/aline-bank-microservice
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - ${BANK_PORT}:${BANK_PORT}
-  #   environment:
-  #     <<: *variables
-  #     APP_PORT: ${BANK_PORT}
+  bank:
+    image: lyndasm/aline-bank-microservice
+    depends_on:
+      - mysql
+    ports:
+      - ${BANK_PORT}:${BANK_PORT}
+    environment:
+      <<: *variables
+      APP_PORT: ${BANK_PORT}
 
-  # card:
-  #   image: lyndasm/aline-card-microservice
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - ${CARD_PORT}:${CARD_PORT}
-  #   environment:
-  #     <<: *variables
-  #     APP_PORT: ${CARD_PORT}
+  card:
+    image: lyndasm/aline-card-microservice
+    depends_on:
+      - mysql
+    ports:
+      - ${CARD_PORT}:${CARD_PORT}
+    environment:
+      <<: *variables
+      APP_PORT: ${CARD_PORT}
 
-  # transaction:
-  #   image: lyndasm/aline-transaction-microservice
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - ${TRANSACTION_PORT}:${TRANSACTION_PORT}
-  #   environment:
-  #     <<: *variables
-  #     APP_PORT: ${TRANSACTION_PORT}
+  transaction:
+    image: lyndasm/aline-transaction-microservice
+    depends_on:
+      - mysql
+    ports:
+      - ${TRANSACTION_PORT}:${TRANSACTION_PORT}
+    environment:
+      <<: *variables
+      APP_PORT: ${TRANSACTION_PORT}
 
-  # underwriter:
-  #   image: lyndasm/aline-underwriter-microservice
-  #   depends_on:
-  #     - mysql
-  #   ports:
-  #     - ${UNDERWRITER_PORT}:${UNDERWRITER_PORT}
-  #   environment:
-  #     <<: *variables
-  #     APP_PORT: ${UNDERWRITER_PORT}
+  underwriter:
+    image: lyndasm/aline-underwriter-microservice
+    depends_on:
+      - mysql
+    ports:
+      - ${UNDERWRITER_PORT}:${UNDERWRITER_PORT}
+    environment:
+      <<: *variables
+      APP_PORT: ${UNDERWRITER_PORT}
 
   user:
     image: lyndasm/aline-user-microservice
