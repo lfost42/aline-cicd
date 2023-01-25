@@ -62,7 +62,8 @@ services:
       <<: *variables
       APP_PORT: 8071
     restart: on-failure
-    # http://aline-network-lb-eca0a43175222cc6.elb.us-west-1.amazonaws.com:8071/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+
+    # http://alinefinancial-ecs.com:8071/swagger-ui/index.html
     # "username": "samantha_carter",
     # "password": "LtColone1!",
     # "role": "admin",

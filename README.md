@@ -1,11 +1,9 @@
 # Aline Financial CI/CD
 
 ## Usage
-
 Continuous integration and continuous delivery (CI/CD) is a software engineering practice that aims to improve the speed, quality, and reliability of software development by automating the build, test, and deployment process. This project established a CI/CD pipeline for our development environment.
 
 ### Aline Financial App Architecture:
-
 ![logo](diagram.png)
 
 # Local Containerization/Automation
@@ -14,7 +12,6 @@ Localized containerization is a way of packaging our web application, along with
 ## Installation
 
 # Requirements:
-
 [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 [VS Code](https://code.visualstudio.com)
@@ -28,7 +25,6 @@ Localized containerization is a way of packaging our web application, along with
 4. Clone the develop branch in [Aline DevOps](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops/-/tree/develop)
 
 ### Build Docker Images and run Docker Compose
-
 1. Follow the steps in `Clone repo files above` if you do not have `Aline Financial` repo files. 
 2. From the `docker` folder, move the following files to the parent `Aline Financial folder` you created in step 2. 
 `Dockerfile.maven`
@@ -51,16 +47,10 @@ Localized containerization is a way of packaging our web application, along with
 
 3. Apply secrets for MYSQL_PASSWORD and secret keys within the aline namespace.
 
-`kubectl create secret generic mysql-password --from-literal DB_PASSWORD=really_good_password --namespace=aline`
-
-`kubectl create secret generic encrypt-key --from-literal ENCRYPT_SECRET_KEY=001104a5cbe95ed3bff1495a1ae92a28 --namespace=aline`
-
-`kubectl create secret generic jwt-key --from-literal JWT_SECRET_KEY=my-32-character-ultra-secure-and-ultra-long-secret --namespace=aline`
-
 4. Apply manifest files. In `k8s` folder:
 `kubectl apply -f .`
 
-5. Update /etc/hosts to add:
+5. Update /etc/hosts to route endpoints through localhost:
 `127.0.0.1 alinefinancial.com`
 `127.0.0.1 member.alinefinancial.com`
 `127.0.0.1 admin.alinefinancial.com`
@@ -74,24 +64,37 @@ A repo maybe created with these files to configure a pipeline provided the Jenki
 set up. 
 
 ## Support
-
 lynda.foster@smoothstack.com<br>
 [Cyber Cumulus Jira](https://cyber-cumulus-smoothstack.atlassian.net/jira/software/projects/CC/boards/1)
 
 ## Roadmap
+[Aline DevOps repo](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aws-cicd) - Check the devlop branch for completed features.
 
-[Aline DevOps repo](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/aline-devops) - Check the devlop branch for completed features.
+- [x] Cloud Containerization
+    - [x] Kubernetes Cloud - EKS
+    - [x] Docker-Compose Cloud via ECS
 
-- [x] Local Containerization and Automation
-    - [x] Dockerize Images
-    - [x] Docker Compose Local
-    - [x] Kubernetes Pod Local
-    - [x] Jenkins
+- [ ] Terraform CI/CD
+    - [ ] Architect Base Infrastructure
+    - [ ] Create Base Infrastructure
 
+- [ ] Jenkins CI/CD
+    Jenkins distributed environment and SonarQube server is runs on 2 EC2 instances.  
+    - [x] Jenkins Pipelines for Microservices
+        - Multi-branch pipelines with a [Node](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/lib-aline-node) and [Maven](https://git1.smoothstack.com/cohorts/2022/organizations/cyber-cumulus/lynda-foster/lib-aline-maven) class library.
+        - Push and Merge triggers via Jenkins Integrations webhook on GitLab. 
+    - [x] Jenkins Integration with SonarQube
+        - Tests and Quality Gates for each Maven and Node applications implemented. 
+    - [ ] Docker-Compose via Jenkins
+    - [ ] Kubernetes via Jenkins
+    - [ ] Terraform Plan and Apply via Jenkins
+    
+- [ ] General CI/CD
+    - [ ] Ansible Playbooks
+    - [ ] Vanilla CloudFormation Templates
+ 
 ## Acknowledgements
-Lead Developer:
-
-[Lynda Foster](https://git1.smoothstack.com/lynda.foster)
+Lead Developer: [Lynda Foster](https://git1.smoothstack.com/lynda.foster)
 
 With support from the Cyber Cumulus Team:
 
@@ -101,7 +104,8 @@ With support from the Cyber Cumulus Team:
 [Sebastian Marzal](https://git1.smoothstack.com/sebastian.marzal)
 
 ## License
-[MIT License](LICENSE.md)
+[MIT License](LICENSE)
 
 ## Project status
 Local Containerization and Automation Complete
+Coud Containerization and Automation Complete
