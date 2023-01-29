@@ -1,0 +1,84 @@
+#!/usr/bin/env groovy
+@Library('lib-aline')
+def gv
+
+pipeline {
+    agent any
+    environment {
+        APP_PORT = 8072
+        SERVICE = 'account'
+        SUBNET = 'private'
+        APP_NAME = 'lf-aline-account-microservice'
+        AWS_ACCESS_KEY_ID = credentials('LF_AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('LF_AWS_SECRET_ACCESS_KEY')
+        AWS_ID = credentials('AWS_ID')
+        W1_AWS_REGION = credentials('W1_AWS_REGION')
+        DB_PASSWORD = credentials('dbp')
+        ENCRYPT_SECRET_KEY = credentials('esk')
+        JWT_SECRET_KEY = credentials('jsk')
+        REGISTRY = "${AWS_ID}.dkr.ecr.${W1_AWS_REGION}.amazonaws.com"
+        REPO = "${SERVER}/${APP_NAME}"
+    }
+    stages {
+        stage('sonar') {
+            steps {
+                script {
+                    mvnSonar()
+                }
+            }
+        }
+        stage('quality gate') {
+            steps {
+                script {
+                    qualityGate()
+                }
+            }
+        }
+        stage('build app') {
+            steps {
+                script {
+                    mvnBuild()
+                }
+            }
+        }
+        stage('image') {
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'main'
+            //     }
+            // }
+            steps {
+                script {
+                    image()
+                }
+            }
+        }
+        stage('deploy to docker-compose') {
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'local'
+            //     }
+            // }
+            steps {
+                script {
+                    echo 'deploy to docker-compose'
+                    // dcDeploy()
+                }
+            }
+        }
+        stage('deploy to ecs') {
+            steps {
+                script {
+                    echo 'deploy to docker-compose'
+                    ecsDeploy()
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+            sh 'docker system prune -af --volumes'
+        }
+    }
+}
