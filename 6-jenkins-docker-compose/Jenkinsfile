@@ -21,6 +21,7 @@ pipeline {
     }
     stages {
         stage('sonar') {
+            // when { not { branch 'hotfix/**'; branch 'feature/**' } }
             steps {
                 script {
                     mvnSonar()
@@ -28,6 +29,7 @@ pipeline {
             }
         }
         stage('quality gate') {
+            // when { not { branch 'hotfix/**'; branch 'feature/**' } }
             steps {
                 script {
                     qualityGate()
@@ -35,6 +37,7 @@ pipeline {
             }
         }
         stage('build app') {
+            // when { not { branch 'hotfix/**'; branch 'feature/**' } }
             steps {
                 script {
                     mvnBuild()
