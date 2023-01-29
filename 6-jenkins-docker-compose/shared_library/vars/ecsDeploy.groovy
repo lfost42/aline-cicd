@@ -1,8 +1,10 @@
 #!/usr/bin/env groovy
 def call() {
     echo 'Updating lf-aline-ecs'
-    def yaml = libraryResource 'k8s/${config.imageName}.yaml'
-    writeFile file: "values.yaml", text: yaml
+    def yaml = libraryResource 'docker-compose.yaml'
+    writeFile file: "docker-compose.yaml", text: yaml
+    def param = libraryResource 'parameters.sh'
+    writeFile file 'parameters.sh', text: sh
 
     sh '''docker context use lf_ecs
     ./parameters.sh
