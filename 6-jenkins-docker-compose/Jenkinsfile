@@ -61,16 +61,47 @@ pipeline {
             // }
             steps {
                 script {
-                    echo 'deploy to docker-compose'
+                    // echo 'deploy to local docker-compose'
                     // dcDeploy()
                 }
             }
         }
-        stage('deploy to ecs') {
+        stage('deploy to local kubernetes') {
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'local'
+            //     }
+            // }
             steps {
                 script {
-                    echo 'deploy to docker-compose'
+                    // echo 'deploy to local kubernetes'
+                    // k8sDeploy()
+                }
+            }
+        }
+        stage('deploy to ecs') {
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'main'
+            //     }
+            // }
+            steps {
+                script {
+                    echo 'deploy to ecs'
                     ecsDeploy()
+                }
+            }
+        }
+        stage('deploy to eks') {
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'main'
+            //     }
+            // }
+            steps {
+                script {
+                    echo 'deploy to eks'
+                    // eksDeploy()
                 }
             }
         }
