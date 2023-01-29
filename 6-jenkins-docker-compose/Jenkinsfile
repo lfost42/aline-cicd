@@ -24,7 +24,7 @@ pipeline {
             // when { not { branch 'hotfix/**'; branch 'feature/**' } }
             steps {
                 script {
-                    mvnSonar()
+                    sonar.mvn()
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
             // when { not { branch 'hotfix/**'; branch 'feature/**' } }
             steps {
                 script {
-                    qualityGate()
+                    qgate()
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
             // when { not { branch 'hotfix/**'; branch 'feature/**' } }
             steps {
                 script {
-                    mvnBuild()
+                    build.mvn()
                 }
             }
         }
@@ -65,7 +65,7 @@ pipeline {
             steps {
                 script {
                     // echo 'deploy to local docker-compose'
-                    // dcDeploy()
+                    dockercompose()
                 }
             }
         }
@@ -78,7 +78,7 @@ pipeline {
             steps {
                 script {
                     // echo 'deploy to local kubernetes'
-                    // k8sDeploy()
+                    kubernetes()
                 }
             }
         }
@@ -91,7 +91,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploy to ecs'
-                    ecsDeploy()
+                    ecs()
                 }
             }
         }
@@ -104,7 +104,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploy to eks'
-                    // eksDeploy()
+                    eks()
                 }
             }
         }

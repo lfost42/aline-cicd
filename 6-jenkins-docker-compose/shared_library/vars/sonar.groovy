@@ -1,6 +1,14 @@
 #!/usr/bin/env groovy
 
-def call() {
+def mvn() {
+    echo "Executing pipeline for branch $BRANCH_NAME"
+    def mvn = tool 'Default Maven';
+    withSonarQubeEnv() {
+        sh "${mvn}/bin/mvn clean verify sonar:sonar"
+    }
+}
+
+def node() {
     echo "Executing pipeline for branch $BRANCH_NAME"
     def scannerHome = tool 'SonarScanner';
         withSonarQubeEnv() {
