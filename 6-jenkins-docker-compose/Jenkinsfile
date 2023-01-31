@@ -7,17 +7,22 @@ pipeline {
     environment {
         APP_PORT = 8072
         SERVICE = 'account'
+        COMPONENT = 'server'
         SUBNET = 'private'
         APP_NAME = 'lf-aline-account-microservice'
         AWS_ACCESS_KEY_ID = credentials('LF_AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('LF_AWS_SECRET_ACCESS_KEY')
         AWS_ID = credentials('AWS_ID')
-        W1_AWS_REGION = credentials('W1_AWS_REGION')
+        AWS_REGION = credentials('W1_AWS_REGION')
         DB_PASSWORD = credentials('dbp')
         ENCRYPT_SECRET_KEY = credentials('esk')
         JWT_SECRET_KEY = credentials('jsk')
-        REGISTRY = "${AWS_ID}.dkr.ecr.${W1_AWS_REGION}.amazonaws.com"
+        REGISTRY = "${AWS_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         REPO = "${SERVER}/${APP_NAME}"
+        RLC = "700m"
+        RLM = "1Gi"
+        RRC = "500m"
+        RRM = "512Mi"
     }
     stages {
         stage('sonar') {
@@ -64,8 +69,8 @@ pipeline {
             // }
             steps {
                 script {
-                    // echo 'deploy to local docker-compose'
-                    dockercompose()
+                    echo 'deploy to local docker-compose'
+                    deploy.dockercompose()
                 }
             }
         }
@@ -78,20 +83,20 @@ pipeline {
             steps {
                 script {
                     // echo 'deploy to local kubernetes'
-                    kubernetes()
+                    deploy.kubernetes()
                 }
             }
         }
         stage('deploy to ecs') {
-            // when {
-            //     expression {
-            //         BRANCH_NAME == 'main'
-            //     }
-            // }
+            when {
+                expression {
+                    BRANCH_NAME == 'ecs'
+                }
+            }
             steps {
                 script {
                     echo 'deploy to ecs'
-                    ecs()
+                    deploy.ecs()
                 }
             }
         }
@@ -104,7 +109,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploy to eks'
-                    eks()
+                    deploy.eks()
                 }
             }
         }
