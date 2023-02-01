@@ -1,0 +1,36 @@
+{
+    "taskDefinition": {
+        "taskDefinitionArn": "arn:aws:ecs:us-west-1:052911266688:task-definition/lf-aline-ecs-account:19",
+        "containerDefinitions": [
+            {
+                "name": "account",
+                "image": "052911266688.dkr.ecr.us-west-1.amazonaws.com/aline-account-microservice:1",
+                "cpu": 0,
+                "portMappings": [],
+                "essential": true,
+                "environment": [],
+                "mountPoints": [],
+                "volumesFrom": []
+            }
+        ],
+        "family": "lf-aline-ecs-account",
+        "revision": 19,
+        "volumes": [],
+        "status": "ACTIVE",
+        "requiresAttributes": [
+            {
+                "name": "com.amazonaws.ecs.capability.ecr-auth"
+            }
+        ],
+        "placementConstraints": [],
+        "compatibilities": [
+            "EXTERNAL",
+            "EC2"
+        ],
+        "cpu": "256",
+        "memory": "512",
+        "registeredAt": "2023-01-25T16:24:21.149000-08:00",
+        "registeredBy": "arn:aws:iam::052911266688:user/lynda.foster@smoothstack.com"
+    },
+    "tags": []
+}

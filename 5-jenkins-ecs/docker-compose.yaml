@@ -1,23 +1,23 @@
 version: "3.8"
 
 x-aws-cluster: lf-aline-ecs
-x-aws-vpc: ${AWS_VPC}
+x-aws-vpc: "vpc-0897dd7e0c1fa2efb"
 x-aws-loadbalancer: aline-network-lb
 
 x-variables: &variables
-  DB_USERNAME: ${DB_USERNAME}
+  DB_USERNAME: admin
   DB_PASSWORD: ${DB_PASSWORD}
-  DB_HOST: ${DB_HOST}
-  DB_PORT: ${DB_PORT}
-  DB_NAME: ${DB_NAME}
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_NAME: alinedb
   ENCRYPT_SECRET_KEY: ${ENCRYPT_SECRET_KEY}
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-  APP_SERVICE_HOST: ${LOAD_BALANCER}
+  APP_SERVICE_HOST: aline-network-lb-eca0a43175222cc6.elb.us-west-1.amazonaws.com
 
 x-react-variables: &react-variables
-  REACT_APP_MEMBER_DASHBOARD_URL: ${MEMBER}
-  REACT_APP_API_BASEURL: ${LOAD_BALANCER}
-  REACT_APP_API: ${LOAD_BALANCER}/api/
+  REACT_APP_MEMBER_DASHBOARD_URL: http://lf-aline-member.s3-website-us-west-1.amazonaws.com
+  REACT_APP_API_BASEURL: aline-network-lb-eca0a43175222cc6.elb.us-west-1.amazonaws.com
+  REACT_APP_API: aline-network-lb-eca0a43175222cc6.elb.us-west-1.amazonaws.com/api/
 
 services:
   mysql:
@@ -25,37 +25,46 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: admin
+      MYSQL_DATABASE: alinedb
     ports:
-      - ${DB_PORT}:${DB_PORT}
+      - 3306:3306
     restart: always
 
   gateway:
-    image: ${REGISTRY}/lf-aline-gateway
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-gateway
     ports:
-      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+      - 80:80
     environment:
-      APP_PORT: ${GATEWAY_PORT}
-      PORTAL_LANDING: ${LANDING}
-      PORTAL_DASHBOARD: ${MEMBER}
-      PORTAL_ADMIN: ${ADMIN}
-      APP_SERVICE_HOST: ${LOAD_BALANCER}
+      APP_PORT: 80
+      PORTAL_LANDING: http://lf-aline-landing.s3-website-us-west-1.amazonaws.com
+      PORTAL_DASHBOARD: http://lf-aline-member.s3-website-us-west-1.amazonaws.com
+      PORTAL_ADMIN: http://lf-aline-admin.s3-website-us-west-1.amazonaws.com
+      APP_SERVICE_HOST: aline-network-lb-eca0a43175222cc6.elb.us-west-1.amazonaws.com
     restart: on-failure
 
   user:
-    image: ${REGISTRY}/lf-aline-user-microservice
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-user-microservice
     depends_on:
       mysql:
         condition: service_healthy
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
-      - ${USER_PORT}:${USER_PORT}
+      - 8071:8071
     environment:
       <<: *variables
       APP_PORT: 8071
     restart: on-failure
 
-    # 8071/swagger-ui/index.html
+    # http://aline-network-lb-eca0a43175222cc6.elb.us-west-1.amazonaws.com:8071/swagger-ui/index.html
     # "username": "samantha_carter",
     # "password": "LtColone1!",
     # "role": "admin",
@@ -65,63 +74,103 @@ services:
     # "phone": "555-555-5555"
 
   account:
-    image: ${REGISTRY}/lf-aline-account-microservice:latest
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-account-microservice
     depends_on:
       mysql:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
-      - ${ACCOUNT_PORT}:${ACCOUNT_PORT}
+      - 8072:8072
     environment:
       <<: *variables
-      APP_PORT: ${ACCOUNT_PORT}
+      APP_PORT: 8072
     restart: on-failure
 
   bank:
-    image: ${REGISTRY}/lf-aline-bank-microservice:latest
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-bank-microservice
     depends_on:
       mysql:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
-      - ${BANK_PORT}:${BANK_PORT}
+      - 8083:8083
     environment:
       <<: *variables
-      APP_PORT: ${BANK_PORT}
+      APP_PORT: 8083
     restart: on-failure
 
   card:
-    image: ${REGISTRY}/lf-aline-card-microservice:latest
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-card-microservice
     depends_on:
       mysql:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     ports:
-      - ${CARD_PORT}:${CARD_PORT}
+      - 8084:8084
     environment:
       <<: *variables
-      APP_PORT: ${CARD_PORT}
+      APP_PORT: 8084
     restart: on-failure
 
   transaction:
-    image: ${REGISTRY}/lf-aline-transaction-microservice:latest
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-transaction-microservice
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     depends_on:
       mysql:
         condition: service_healthy
     ports:
-      - ${TRANSACTION_PORT}:${TRANSACTION_PORT}
+      - 8073:8073
     environment:
       <<: *variables
-      APP_PORT: ${TRANSACTION_PORT}
+      APP_PORT: 8073
     restart: on-failure
 
   underwriter:
-    image: ${REGISTRY}/lf-aline-underwriter-microservice:latest
+    image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-underwriter-microservice
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: '1Gi'
+        reservations:
+          cpus: '0.5'
+          memory: 512Mi
     depends_on:
       mysql:
         condition: service_healthy
     ports:
-      - ${UNDERWRITER_PORT}:${UNDERWRITER_PORT}
+      - 8070:8070
     environment:
       <<: *variables
-      APP_PORT: ${UNDERWRITER_PORT}
+      APP_PORT: 8070
     restart: on-failure
 
 x-aws-cloudformation:
@@ -132,7 +181,7 @@ x-aws-cloudformation:
         HealthCheckTimeoutSeconds: 30
         HealthyThresholdCount: 5
         UnhealthyThresholdCount: 5
-    UserTCP8070TargetGroup:
+    UserTCP8071TargetGroup:
       Properties:
         HealthCheckIntervalSeconds: 180
         HealthCheckTimeoutSeconds: 30
@@ -162,7 +211,7 @@ x-aws-cloudformation:
         HealthCheckTimeoutSeconds: 30
         HealthyThresholdCount: 5
         UnhealthyThresholdCount: 5
-    UnderwriterTCP8071TargetGroup:
+    UnderwriterTCP8070TargetGroup:
       Properties:
         HealthCheckIntervalSeconds: 180
         HealthCheckTimeoutSeconds: 30

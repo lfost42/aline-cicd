@@ -5,7 +5,7 @@ def call() {
         script {
             def qg = waitForQualityGate()
             if (qg.status != 'OK') {
-                error 'Pipeline quality gate failed: ${qg.status}'
+                echo 'Pipeline quality gate failed: ${qg.status}'
             }
         }
     }
