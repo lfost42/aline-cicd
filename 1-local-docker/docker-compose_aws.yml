@@ -19,7 +19,7 @@ volumes:
 services:
   # Database
   mysql:
-    image: lyndasm/aline-mysql
+    image: mysql:latest
     volumes:
       - db-data:/var/lib/mysql
     ports:

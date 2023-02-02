@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-deployment
+  namespace: aline
+  labels:
+    aline.component: server
+    subnet: private
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      aline.component: server
+      subnet: private
+  template:
+    metadata:
+      labels:
+        aline.component: server
+        subnet: private
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: subnet
+                operator: In
+                values:
+                - private
+      imagePullSecrets:
+        - name: aws-registry-key
+      containers:
+      - name: bank
+        image: 052911266688.dkr.ecr.us-west-1.amazonaws.com/lf-aline-bank-microservice
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8083
+        env:
+        - name: APP_PORT
+          value: "8083"
+        envFrom:
+        - secretRef:
+            name: aline-config
+        resources:
+          limits:
+            cpu: "700m"
+            memory: "1Gi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+      restartPolicy: Always

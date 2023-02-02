@@ -1,0 +1,7 @@
+auth:
+  database: alinedb
+  username: user
+  password: really_good_password
+  rootPassword: really_good_password
+
+namespaceOverride: aline
