@@ -1,0 +1,96 @@
+#!/usr/bin/env groovy
+@Library('lib-aline')
+def gv
+
+pipeline {
+    agent any
+    environment {
+        APP_PORT = 8083
+        SERVICE = 'bank'
+        SUBNET = 'private'
+        TYPE = 'p'
+        APP_NAME = 'lf-aline-bank-microservice'
+        AWS_ACCESS_KEY_ID = credentials('LF_AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('LF_AWS_SECRET_ACCESS_KEY')
+        AWS_ID = credentials('AWS_ID')
+        AWS_REGION = credentials('W1_AWS_REGION')
+        DB_PASSWORD = credentials('dbp')
+        ENCRYPT_SECRET_KEY = credentials('esk')
+        JWT_SECRET_KEY = credentials('jsk')
+        REGISTRY = "${AWS_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        REPO = "${REGISTRY}/${APP_NAME}"
+    }
+    stages {
+        stage('sonar') {
+            when { branch pattern: "^\b([a-z0-9]+)\b(?<!feature|hotfix)", comparator: "REGEXP"}
+            steps {
+                script {
+                    sonar.mvn()
+                }
+            }
+        }
+        stage('quality gate') {
+            when { branch pattern: "^\b([a-z0-9]+)\b(?<!feature|hotfix)", comparator: "REGEXP"}
+            steps {
+                script {
+                    qgate()
+                }
+            }
+        }
+        stage('build app') {
+            // when { branch pattern: "^\b([a-z0-9]+)\b(?<!feature|hotfix)", comparator: "REGEXP"}
+            steps {
+                script {
+                    build.mvn()
+                }
+            }
+        }
+        stage('image') {
+            // when { branch pattern: "^\b([a-z0-9]+)\b(?<!feature|hotfix)", comparator: "REGEXP"}
+            steps {
+                script {
+                    image()
+                }
+            }
+        }
+        stage('deploy to docker-compose') {
+            when { expression { BRANCH_NAME == 'local-dc' } }
+            steps {
+                script {
+                    echo 'deploy to local docker-compose'
+                    deploy.dockercompose()
+                }
+            }
+        }
+        stage('deploy to local kubernetes') {
+            // when { expression { BRANCH_NAME == 'local-k8' } }
+            steps {
+                script {
+                    deploy.kubernetes()
+                }
+            }
+        }
+        stage('deploy to ecs') {
+            when { expression { BRANCH_NAME == 'ecs' } }
+            steps {
+                script {
+                    deploy.ecs()
+                }
+            }
+        }
+        stage('deploy to eks') {
+            when { branch pattern: "^(develop|main)", comparator: "REGEXP"}
+            steps {
+                script {
+                    deploy.eks()
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+            sh 'docker system prune -af --volumes'
+        }
+    }
+}

@@ -6,5 +6,4 @@ helm repo add mysql-repo https://charts.bitnami.com/bitnami
 helm install mysql mysql-repo/mysql --values k8/mysql-bn.yaml
 
 kubectl apply -f k8/bank-deployment.yaml
-kubectl apply -f k8/uset-deployment.yaml
 kubctl apply -f k8/server-cluster-ip.yaml

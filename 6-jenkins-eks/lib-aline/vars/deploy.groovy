@@ -14,11 +14,7 @@ def ecs() {
 
         docker context create ecs lf_ecs --from-env
         docker context use lf_ecs
-
         docker compose -p "lf-aline-dc" --env-file .env_ecs up
-
-        docker context use default
-        docker context delete lf_ecs
         '''
     }
 }
@@ -34,8 +30,24 @@ def eks() {
 
 def dockercompose() {
     echo 'Deploy local docker compose'
+    EC2 = "ubuntu@ec2-13-56-241-22.${AWS_REGION}.compute.amazonaws.com"
+    withCredentials([file(credentialsId: 'lf-aline-pem', variable: 'PEM_FILE')]) {
+        sh """
+            ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ${EC2} \
+            'docker compose -f aline/dc/docker-compose_loc.yml --env-file aline/dc/.env_loc up | exit'
+        """
+    }
 }
 
 def kubernetes() {
-    echo 'Deploy local kubernetes'
+    echo 'updating lf-aline-local'
+    EC2 = "ubuntu@ec2-13-56-241-22.${AWS_REGION}.compute.amazonaws.com"
+    withKubeConfig([credentialsId: 'lf-local-kubeconfig']) {
+        withCredentials([file(credentialsId: 'lf-aline-pem', variable: 'PEM_FILE')]) {
+            sh """
+                ssh -o StrictHostKeyChecking=no -i ${PEM_FILE} ${EC2} \
+                'kubectl apply -f aline/k8/${SERVICE}-deployment.yaml'
+            """
+        }
+    }
 }

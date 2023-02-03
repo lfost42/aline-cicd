@@ -30,7 +30,7 @@ spec:
       imagePullSecrets:
         - name: aws-registry-key
       containers:
-      - name: bank
+      - name: ${SERVICE}
         image: ${REPO}:${GIT_COMMIT}
         imagePullPolicy: Always
         ports:
