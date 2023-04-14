@@ -1,0 +1,72 @@
+# aws eks --region us-east-1 update-kubeconfig --name lf-aline
+# envsubst .env < cluster-config.yaml | eksctl create cluster -f -
+
+eksctl create cluster -f cluster-config.yaml
+
+kubectl create namespace aline
+kubectl config set-context --current --namespace=aline
+kubectl create secret generic aline-config --from-env-file notes/.env_config
+kubectl create secret docker-registry aws-registry-key \
+  --docker-server=052911266688.dkr.ecr.us-west-1.amazonaws.com \
+  --docker-username=AWS \
+  --docker-password=$(aws ecr get-login-password) \
+  --namespace=aline
+
+# kubectl run -it --rm --image=mysql:8.0.28 --restart=Never mysql-client -- mysql -h alinedb.ckgn8hh1chiz.us-west-1.rds.amazonaws.com -u admin -p
+# mysql> drop database lf_alinedb;
+# mysql> create database lf_alinedb;
+# mysql> show schemas;
+# mysql> exit;
+
+# aws iam create-policy \
+#    --policy-name AWSLoadBalancerControllerIAMPolicy \
+#    --policy-document file://iam_policy.json
+
+# eksctl create iamserviceaccount \
+#   --cluster=lf-aline \
+#   --namespace=kube-system \
+#   --name=aws-load-balancer-controller \
+#   --attach-policy-arn=arn:aws:iam::052911266688:policy/AWSLoadBalancerControllerIAMPolicy \
+#   --override-existing-serviceaccounts \
+#   --region us-west-1 \
+#   --approve
+
+# helm uninstall aws-load-balancer-controller aws-load-balancer-controller -n kube-system
+# kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+# helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=lf-aline --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+    --set clusterName=lf-aline \
+    --set serviceAccount.create=false \
+    --set region=us-west-1 \
+    --set vpcId=vpc-0a5781a5a7a46df64 \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    -n kube-system
+# https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/
+
+kubectl apply -f private/
+kubectl apply -f public/
+
+# verify domains are mapping:
+curl -i -H "Host: admin.alinefinancial.com" af99c30d9e28d47fca12dc3b1ac646ae-355520629.us-west-1.elb.amazonaws.com
+curl -i -H "Host: alinefinancial.com" a79b4015559cd440d9afc4478f3103d6-1698221934.us-west-1.elb.amazonaws.com
+curl -i -H "Host: member.alinefinancial.com" a8fba98f78ab142dbbe1913bffbdfaae-1741719430.us-west-1.elb.amazonaws.com
+
+https://www.nslookup.io
+
+52.8.149.191 admin.alinefinancial.com
+52.53.94.12 admin.alinefinancial.com
+13.56.135.190 alinefinancial.com
+54.193.120.39 alinefinancial.com
+13.56.93.31 member.alinefinancial.com
+52.9.194.122 member.alinefinancial.com
+54.215.201.113 api.alinefinancial.com
+54.176.113.228 api.alinefinancial.com
+
+sudo vim /etc/hosts
+
+ace3d7b151a80424b9d2a76e131d7f7c-1874858767.us-west-1.elb.amazonaws.com
+
+kubectl delete all --all
+stop database
+
+eksctl delete cluster -f notes/cluster-config.yaml
